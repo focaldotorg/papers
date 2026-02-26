@@ -25,4 +25,4 @@ Thumbs.db
 *~
 
 # Compiled PDFs (uncomment if building via CI)
-# **/*.pdf
+**/*.pdf
