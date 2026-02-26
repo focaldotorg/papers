@@ -1,0 +1,34 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{preamble}
+
+% Math
+\usepackage{amsmath,amssymb,amsfonts}
+
+% Graphics & figures
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+
+% Layout & typography
+\usepackage{geometry}
+\usepackage[parfill]{parskip}
+\usepackage[semibold]{sourcesanspro}
+\usepackage[none]{hyphenat}
+\usepackage{microtype}
+\usepackage{multicol}
+\usepackage{eso-pic}
+\usepackage{mdframed}
+
+% Misc
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{authblk}
+
+% Page settings
+\geometry{margin=0.6in}
