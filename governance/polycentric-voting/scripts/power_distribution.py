@@ -31,9 +31,13 @@ class PVAnalyzer:
         return weight
 
     def calculate_power_ratio(self, t_effective):
-        k = self.rmax / np.log2(self.tmax)
-        alpha = max(self.rmin, min(self.rmax, self.rmin + (t_effective * k)))
-        return alpha
+        # Normalize time to 0.0 - 1.0
+        progress = np.clip(t_effective / self.tmax, self.rmin, self.rmax)
+        # k < 1.0 = fast start (log-like)
+        # k = 1.0 = straight line
+        # k > 1.0 = slow start (exponential-like)
+        k = 0.1
+        return self.rmin + (self.rmax - self.rmin) * (progress ** k)
 
     def calculate_voting_power(self, tokens, t_effective):
         if t_effective <= 0: return 0
@@ -49,22 +53,21 @@ class PVAnalyzer:
 # Large:    10 * 1000  = 10,000 (10.0%)
 # Median:   20 * 500   = 10,000 (10.0%)
 # Minor:    40 * 200   =  8,000  (8.0%)
-# Small:   100 * 50    =  5,000  (5.0%)
-# Subtotal stakeholders: 43,000 (43.0%)
+# Small:   100 * 50    =  5,000  (7.0%)
+# Subtotal stakeholders: 43,000 (45.0%)
 # Operations:            40,000 (40.0%)
-# Liquidity:             17,000 (17.0%)
+# Liquidity:             17,000 (15.0%)
 # Total:                100,000 (100.0%)
 
-cat_tokens = {'Major': 2000, 'Large': 1000, 'Median': 500, 'Minor': 200, 'Small': 50}
+cat_tokens = {'Major': 2000, 'Large': 1000, 'Median': 500, 'Minor': 200, 'Small': 100}
 
 schedule = {
-    0:  {'Major': 1, 'Large': 2,  'Median': 3,  'Minor': 6,  'Small': 5},
-    20: {'Major': 2, 'Large': 4,  'Median': 7,  'Minor': 14, 'Small': 20},
-    40: {'Major': 3, 'Large': 7,  'Median': 12, 'Minor': 25, 'Small': 45},
-    60: {'Major': 4, 'Large': 9,  'Median': 17, 'Minor': 35, 'Small': 75},
-    80: {'Major': 5, 'Large': 10, 'Median': 20, 'Minor': 40, 'Small': 100}
+    0:  {'Major': 1, 'Large': 2,  'Median': 3,  'Minor': 6,  'Small': 4},
+    20: {'Major': 2, 'Large': 4,  'Median': 7,  'Minor': 14, 'Small': 14},
+    40: {'Major': 3, 'Large': 7,  'Median': 12, 'Minor': 25, 'Small': 32},
+    60: {'Major': 4, 'Large': 9,  'Median': 17, 'Minor': 35, 'Small': 53},
+    80: {'Major': 5, 'Large': 10, 'Median': 20, 'Minor': 40, 'Small': 70},
 }
-
 
 def build_stakeholders():
     all_stakeholders = []

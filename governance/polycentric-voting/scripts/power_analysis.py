@@ -58,11 +58,9 @@ def calculate_time_weight(t_effective):
             break
     return weight
 
-
 def calculate_power_ratio(t_effective):
-    k = RMAX / np.log2(TMAX)
-    return max(RMIN, min(RMAX, RMIN + t_effective * k))
-
+    progress = np.clip(t_effective / TMAX, RMIN, RMAX)
+    return RMIN + (RMAX - RMIN) * (progress ** 0.1)
 
 def calculate_voting_power(tokens, t_effective):
     if t_effective <= 0:
