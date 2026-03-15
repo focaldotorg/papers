@@ -23,6 +23,7 @@
 \usepackage{microtype}
 \usepackage{multicol}
 \usepackage[table]{xcolor}
+\usepackage{float}
 
 % Page settings
 \geometry{margin=0.6in}
@@ -114,7 +115,7 @@ The variance of $t_{\text{effective}}$ is produced by the scalar product of depo
 Where higher $\rho$ reflects greater divergence in commitment, therefore tenure ($\tau$) can be defined as:
 
 \begin{equation}
-\tau \propto \frac{1}{\rho}
+    \tau \propto \frac{d\rho}{dt}
 \end{equation}
 
 A consistent trajectory produces low $\rho$ and high $\tau$, whereas irregular commitment history results anomalously high $\rho$ and thus low $\tau$, acting as the product of a shareholder's \textbf{commitment profile}.
@@ -295,6 +296,27 @@ The agile configuration shows two discrete power accumulation points at $T_1$ an
     \label{fig:gini}
 \end{figure}
 
+\section{Power Analysis}
+
+Using the Banzhaf power index we can approximate the basis of influence between PV and traditional shareholder governance (weighted voting) benchmarked using the Agile configuration (table 2), 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{banzhaf_plutocracy.png}
+    \caption{Plutocracy power complex series}
+    \label{fig:gini}
+\end{figure}
+
+We can see an incremental but immediate transition to a static hierarchy in plutocracy, where power dynamics remain flat even with the element of time. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{banzhaf_pv.png}
+    \caption{PV power complex series}
+    \label{fig:gini}
+\end{figure}
+
+Whereas in the case of PV we can see a clear contention of power in the early phases of $T_1$ with clear volatility, not only this but we that dominant coalition of large reaches an even more significant threshold of power accumulation and at a later date versus plutocracy. With clear convergence back to plutocratic means towards $t_{max}$.
 
 \section{Strategies}
 
@@ -310,41 +332,46 @@ A stakeholder strategically obtains or locks shares gradually to dilute their ti
 
 A stakeholder aims to take advantage of the quadratic weighting by sybil attacking. For example, Claude has 10,000 shares and splits the balance to different stakeholder accounts. Amplifying their voting power temporally due to the quadratic weighting.  
 
+\subsection{Dynamic}
+A stakeholder actively manages their position through partial withdrawals and redeposits. Unlike singleton or sequential strategies which represent monotonic commitment, the dynamic actor introduces deliberate discontinuities for example reducing exposure at $T_1$, re-entering at $T_2$, and withdrawing again at day 540. 
+
 \subsection{Benchmark}
 
 Each strategy assumes a total allocation of 10,000 shares, where $P$ equals 0.2 at $t_p$ to 30 days, then 0.4 for 90 days, 0.6 for 180 days, 0.8 for 365 days and 1 for 720 days.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{qlv_strategies.png}
+    \includegraphics[width=0.85\textwidth]{strategies.png}
     \caption{Strategies voting power series}
     \label{fig:gini}
 \end{figure}
 
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{l*{6}{>{\centering\arraybackslash}X}}
 \toprule 
 Strategy & 3 Months & 6 Months & 12 Months & 24 Months & Impact \\
 \midrule
-Singleton & 3,938& 6,563 & 7,884 & 10,000 & +100\% \\
-Sequential & 3,360 & 5,888 & 7,792 & 9,400  & +88\% \\
-Splitting & 4,860& 6,480& 7,200 & 5,000 & -50\%  \\
+Singleton & 10,190 & 13,060 & 69,931 & 159,852 & +0\% \\
+Sequential & 3,402 & 8,208 & 54,409 & 150,531 & -6\% \\
+Splitting & 11,473 & 13,364 & 58,835 & 79,928 & -50\% \\
+Dynamic & 5,100 & 3,270 & 17,495 & 68,785 & -57\% \\
 \bottomrule
 \end{tabularx}
 \caption{Strategy voting power}
 \label{tab:strategy}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{l*{5}{>{\centering\arraybackslash}X}}
 \toprule 
 Strategy & 3 Months & 6 Months & 12 Months & 24 Months & Average \\
 \midrule
-Singleton & 1,313 $V_{p}$/s & 1,094 $V_{p}$/s & 657 $V_{p}$/s& 417 $V_{p}$/s& 870 $V_{p}$/s \\
-Sequential & 1,120 $V_{p}$/s & 981 $V_{p}$/s & 649 $V_{p}$/s & 392 $V_{p}$/s & 786 $V_{p}$/s \\
-Splitting & 1,620 $V_{p}$/s & 1,080 $V_{p}$/s & 600 $V_{p}$/s & 208 $V_{p}$/s & 877 $V_{p}$/s \\
+Singleton & 1,310 $V_{p}$/s & 840 $V_{p}$/s & 2,218 $V_{p}$/s & 2,534 $V_{p}$/s & 1,726 $V_{p}$/s \\
+Sequential & 437 $V_{p}$/s & 528 $V_{p}$/s & 1,725 $V_{p}$/s & 2,386 $V_{p}$/s & 1,269 $V_{p}$/s \\
+Splitting & 1,476 $V_{p}$/s & 859 $V_{p}$/s & 1,866 $V_{p}$/s & 1,267 $V_{p}$/s & 1,367 $V_{p}$/s \\
+Dynamic & 656 $V_{p}$/s & 210 $V_{p}$/s & 555 $V_{p}$/s & 1,090 $V_{p}$/s & 628 $V_{p}$/s \\
 \bottomrule
 \end{tabularx}
 \caption{Strategy power rates}
@@ -353,11 +380,35 @@ Splitting & 1,620 $V_{p}$/s & 1,080 $V_{p}$/s & 600 $V_{p}$/s & 208 $V_{p}$/s & 
 
 While token-splitting is advantageous in the short-term, it ultimately fails to increase voting power over time but actually expenses a stakeholder's governance influence by approximately 50\% due to the time weighting loss. Following the Nash  equilibrium theorem, we can identify the Singleton strategy as the dominant strategy, the Sequential strategy as the equilibrium strategy and the Splitting strategy as the suboptimal strategy.
 
+\section{Ergodicity}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{path_dependency.png}
+    \caption{Strategy effective time series}
+    \label{fig:teffective}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{path_dependency_rho.png}
+    \caption{Strategy path dependency series}
+    \label{fig:paths}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{tenure_benchmark.png}
+    \caption{Dynamic versus Singleton tenure series}
+    \label{fig:tenurei}
+\end{figure}
+
+\newpage
+
 \section{Emergent Properties}
 
-\subsection{Wealth Dispersion}
-
-PV significantly empowers smaller stakeholders through the quadratic dampening in the early phases of the governance cycle. By using the Gini coefficient, we can investigate how much of an impact this has.Assuming the previous distribution defined in the voting power plot, we can see that it effectively empowers minor demographics in the early and median phases of the voting power curve until converging towards purely linear weighting.
+\subsection{Vote Provenance}
+Every vote is implicitly backed by a verifiable profile $t_{\text{effective}}$, $\rho$ and $\tau$ requiring no additional infrastructure. This creates a transparent signal of governance legitimacy that persists independently of voting outcomes, enabling participants to distinguish committed actors from transient capital throughout the governance lifecycle.
 
 \subsection{Coalition building}
 By introducing opacity in power progression, the model naturally incentivises cooperation, where participants within similar time-weighted tranches find strategic alignment. This creates an emergent governance landscape where shared experience and comparable power levels encourage collaborative strategies.  
