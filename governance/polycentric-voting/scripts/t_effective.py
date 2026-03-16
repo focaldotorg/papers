@@ -96,7 +96,6 @@ for event_day, delta in DYNAMIC_EVENTS[1:]:
     ax.text(event_day + 4, ax.get_ylim()[1] * 0.95 if ax.get_ylim()[1] > 0 else 1,
             label, fontsize=7, color='orange', alpha=0.8)
 
-ax.set_title('Path Dependency: $t_{\\mathrm{effective}}$ by Commitment Strategy (Agile Configuration)')
 ax.set_xlabel('Days')
 ax.set_ylabel('$t_{\\mathrm{effective}}$ (days)')
 ax.legend(fontsize=9)

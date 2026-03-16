@@ -278,7 +278,7 @@ Liquidity  & – & 15,000 & 1 & 15,000 & 15.0\% \\
 
 Following the distribution in table 3, we can plot the configurations for agile (table 1) and graduated (table 2) to visualise voting power curves across different instances. 
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{power_distribution_agile.png}
     \caption{Agile power progression series}
@@ -289,7 +289,7 @@ The agile configuration shows two discrete power accumulation points at $T_1$ an
 
 \vspace{10pt}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{power_distribution_graduated.png}
     \caption{Graduated power progression series}
@@ -338,6 +338,8 @@ A stakeholder actively manages their position through partial withdrawals and re
 \subsection{Benchmark}
 
 Each strategy assumes a total allocation of 10,000 shares, where $P$ equals 0.2 at $t_p$ to 30 days, then 0.4 for 90 days, 0.6 for 180 days, 0.8 for 365 days and 1 for 720 days.
+
+\vspace{15pt}
 
 \begin{figure}[h]
     \centering
@@ -396,6 +398,21 @@ While token-splitting is advantageous in the short-term, it ultimately fails to 
     \label{fig:paths}
 \end{figure}
 
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{l*{5}{>{\centering\arraybackslash}X}}
+\toprule
+Strategy & d=90 & d=180 & d=365 & d=540 & d=720 \\
+\midrule
+Singleton & 7.67 & 15.17 & 30.58 & 45.17 & 60.17 \\
+Sequential & 7.65 & 8.10 & 9.33 & 18.90 & 35.20 \\
+Dynamic & 7.67 & 15.17 & 30.58 & 22.53 & 17.89 \\
+\bottomrule
+\end{tabularx}
+\caption{Strategy tenure ($\tau$) by commitment trajectory}
+\label{tab:tenure}
+\end{table}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{tenure_benchmark.png}
@@ -438,10 +455,46 @@ An empty vote is a vote with no commitment profile behind it - zero $\tau$ by co
 
 Leased positions are not empty votes, while delegation carries the delegator's full $\tau$, the commitment profile is genuine, earned through sustained participation, and travels with the authority for the duration. The temporal transfer of $\tau$ to a low or zero $\tau$ actor is not itself an empty vote - it is a realignment of $\tau$ whose liability remains derivative of the delegator. The commitment profile does not transfer ownership, only function - the delegator remains the source of legitimacy for the duration, and revocation returns authority unconditionally. Delegated authority in PV is always tethered. Empty voting is orphaned authority. The distinction is structural and irreconcilable. By isolating the residual vulnerability to delegation alone, PV compresses the empty voting attack surface from the entire financial instrument landscape into a single unified process - one with defined mechanics, revocability, and structural scarcity of high $\tau$ positions among long-term aligned participants.
 
+\section{Polycentrism}
+
+Ostrom (1990) identified eight design principles that characterise sustainable collective governance institutions. We map each principle to the properties of Polycentric Voting to demonstrate that PV satisfies the empirical conditions for effective collective governance by construction rather than by approximation: \\
+
+\begin{enumerate}
+\item \textbf{Clearly Defined Boundaries:} PV defines participation boundaries through share ownership and commitment trajectory. The governance system knows exactly who is participating, with what capital, and for how long. $t_{\mathrm{effective}}$ creates a second boundary layer not just who holds shares but who has demonstrated commitment. Participation is clearly defined on both the capital and temporal axes.
+
+\item \textbf{Congruence Between Rules and Local Conditions:} The configurable tranche system agile versus graduated directly satisfies this principle. Organisations parameterise $t_{\mathrm{max}}$, tranche thresholds and $P$ values to match their governance lifecycle. A nascent organisation and a mature cooperative operate under fundamentally different commitment timescales and PV adapts accordingly. No universal rule is imposed regardless of context.
+
+\item \textbf{Collective Choice Arrangements:} Graduated proposals give participants direct influence over governance decisions proportional to their commitment tier. Low severity proposals are accessible to all participants early in the lifecycle, critical proposals require mature consensus. The system governs its own governance through the same commitment mechanics that determine voting power.
+
+\item \textbf{Monitoring:} Vote provenance is the monitoring mechanism. Every vote is backed by a verifiable commitment profile $t_{\mathrm{effective}}$, $\rho$ and $\tau$ requiring no external monitor. The system produces its own audit trail as a byproduct of the commitment mechanics. Any participant can inspect any other participant's trajectory at any time, making governance behaviour transparent by construction.
+
+\item \textbf{Graduated Sanctions:} Sybil attacks are not prohibited but are mathematically penalised a 50\% voting power loss at maturity for splitting versus singleton. Dynamic commitment disruption produces anomalously high $\rho$ and consequently low $\tau$, a permanent signal of non-commitment embedded in the participant's governance profile. The sanction scales with the severity of the behaviour and requires no external enforcement mechanism.
+
+\item \textbf{Conflict Resolution Mechanisms:} Delegation in PV retains full revocability by the delegator at any time, even during an active proposal. A participant who delegates authority and subsequently disagrees with how it is being exercised can unconditionally reclaim their voting power without requiring a new proposal or external arbitration. Revocability is the conflict resolution primitive disputes over delegated authority are resolved immediately and unilaterally by the party whose commitment profile backs the authority.
+
+\item \textbf{Recognition of Rights to Organise:} PV facilitates the right to self-organise through the normalisation of voting power across graduated time weight tranches. Participants within equivalent commitment tiers share comparable influence, creating conditions for natural coalition formation without requiring external coordination or permission. The emergent demographic stratification produced by the tranche structure where participants of similar tenure find strategic alignment  is polycentrism's self-organising property formalised as a mechanical consequence of the commitment architecture.
+
+ \item \textbf{Nested Enterprises:} The three orthogonal axes of authority capital, time weight and tenure create nested layers of governance that satisfy both Polanyi's structural definition of polycentrism and Ostrom's nested enterprise principle simultaneously. No single axis dominates, each layer carries independent authority, and composite voting power emerges from their interaction. Consequential decisions require convergence across all three axes while routine decisions resolve within a single tier a nested governance architecture formalised mathematically.
+\end{enumerate}
+
+\vspace{10pt}
+
+PV satisfies Polyani's structural definition by construction. Capital, time weight and tenure constitute three genuinely independent axes of authority, each computable from first principles and none reducible to the others. A participant cannot maximise all three simultaneously through capital alone — tenure must be earned through commitment consistency, time weight through sustained participation. No single actor can dominate all three axes simultaneously, and the composite governance hierarchy that emerges is therefore resistant to the concentration that undermines plutocratic systems. This is polycentrism not as an aspiration but as a mathematical property of the mechanism.
+
+\section{Limitations}
+
+    \textbf{Simulation sample distribution} assumes a simplified holder distribution with fixed share allocations and a controlled onboarding schedule. Real governance distributions are more heterogeneous and the competitive dynamics observed may differ under alternative configurations. Results should be interpreted as illustrative of the mechanism's properties rather than predictive of any specific deployment. 
+    
+ \textbf{Tenure as a signal} mechanism and not an enforceable governance primitive in its current formulation. Its informational value compounds with organisational age and is negligible in early stage governance where longitudinal commitment data is insufficient to distinguish trajectories meaningfully. 
+    
+\textbf{Delegation market risk} remains the most credible attack vector. While high $\tau$ positions are supply constrained by construction and delegated authority retains the delegator's commitment profile, the emergence of secondary markets around governance legitimacy cannot be structurally eliminated — only made economically costly relative to direct participation.
+
 \section{Conclusion}
 
 Polycentric voting is a governance model to align the interests of an organisation with its participants and makes power dynamics explicit, rather than opaque, creating more strategic and nuanced governance. \\\\
 It provides a more robust and efficient voting model for organisations versus pure plutocracy and is the closest mathematical representation of human decision-making, commitment, and loyalty within organisational systems.
+
+\newpage
 
 \section{References}
 

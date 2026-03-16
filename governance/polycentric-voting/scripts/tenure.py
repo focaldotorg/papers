@@ -93,7 +93,6 @@ for event_day, delta in MAJOR_DYNAMIC_EVENTS[1:]:
     ax.text(event_day + 4, max(max(t) for t in tau_results.values()) * 0.95,
             f'{"+" if delta > 0 else ""}{delta:,}', fontsize=7, color='red', alpha=0.7)
 
-ax.set_title('Tenure (τ): Major Dynamic vs Small Singleton (Agile Configuration)')
 ax.set_xlabel('Days')
 ax.set_ylabel('τ (Slope of ρ)')
 ax.legend(fontsize=10)

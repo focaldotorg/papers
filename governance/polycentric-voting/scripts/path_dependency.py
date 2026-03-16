@@ -75,7 +75,6 @@ for event_day, delta in DYNAMIC_EVENTS[1:]:
     ax.text(event_day + 4, max(rho) * 0.95,
             f'{"+" if delta > 0 else ""}{delta:,}', fontsize=7, color='orange', alpha=0.8)
 
-ax.set_title('Path Dependency: ρ (Variance of $t_{\\mathrm{effective}}$) Across Strategies (Agile Configuration)')
 ax.set_xlabel('Days')
 ax.set_ylabel('ρ (Variance)')
 ax.legend(fontsize=9)

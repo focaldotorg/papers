@@ -30,7 +30,7 @@ def banzhaf(weight, quota):
     return [float(p) / total_power if total_power > 0 else 0.0 for p in banzhaf_power]
 
 
-# ─── PV Engine (agile configuration) ─────────────────────────────────────────
+# ─── PV Engine ────────────────────────────────────────────────────────────────
 
 AGILE_TRANCHES = [
     {"max_days": 180,          "P": 0.2},
@@ -59,20 +59,20 @@ def calculate_time_weight(t_effective):
     return weight
 
 def calculate_power_ratio(t_effective):
-    progress = np.clip(t_effective / TMAX, RMIN, RMAX)
+    progress = np.clip(t_effective / TMAX, 0, 1)
     return RMIN + (RMAX - RMIN) * (progress ** 0.1)
 
 def calculate_voting_power(tokens, t_effective):
     if t_effective <= 0:
         return 0.0
-    W = calculate_time_weight(t_effective)
+    W     = calculate_time_weight(t_effective)
     alpha = calculate_power_ratio(t_effective)
     return W * (alpha * tokens + np.sqrt(tokens) * (1 - alpha))
 
 
-# ─── Stakeholders (original distribution) ────────────────────────────────────
+# ─── Stakeholders ─────────────────────────────────────────────────────────────
 
-SCALE = 100  # divide all weights by this constant before passing to Banzhaf
+SCALE = 100
 
 CAT_TOKENS = {'Major': 2000, 'Large': 1000, 'Median': 500, 'Minor': 200, 'Small': 100}
 
@@ -107,18 +107,15 @@ def run_banzhaf_benchmark(max_days=720, step=5):
         if not active:
             continue
 
-        # Individual voter weights scaled down by constant factor
         pv_weights    = [max(1, int(calculate_voting_power(s['tokens'], day - s['join_day']) / SCALE)) for s in active]
         pluto_weights = [max(1, int(s['tokens'] / SCALE)) for s in active]
 
-        # 51% quota
         pv_quota    = ceil(sum(pv_weights)    * 0.66)
         pluto_quota = ceil(sum(pluto_weights) * 0.66)
 
         pv_idx    = banzhaf(pv_weights,    pv_quota)
         pluto_idx = banzhaf(pluto_weights, pluto_quota)
 
-        # Aggregate by coalition
         cat_pv    = {c: 0.0 for c in cats}
         cat_pluto = {c: 0.0 for c in cats}
         for i, s in enumerate(active):
@@ -140,24 +137,32 @@ def plot_banzhaf(df):
     cats   = list(CAT_TOKENS.keys())
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
 
-    fig, axes = plt.subplots(1, 2, figsize=(15, 6), sharey=True)
-    for ax, (label, prefix) in zip(axes, [
-        ('PV — Polycentric Voting', 'pv_'),
-        ('Plutocracy — Raw Tokens', 'pluto_'),
-    ]):
-        for cat, color in zip(cats, colors):
-            ax.plot(df['day'], df[f'{prefix}{cat}'], label=cat, color=color, linewidth=1.8)
-        ax.axvline(x=180, color='grey', linestyle='--', alpha=0.4, label='T1 (180d)')
-        ax.axvline(x=365, color='grey', linestyle=':',  alpha=0.4, label='T2 (365d)')
-        ax.set_title(label)
-        ax.set_xlabel('Days')
-        ax.set_ylabel('Banzhaf Power Index')
-        ax.legend(fontsize=9)
-        ax.grid(True, alpha=0.2)
-
-    plt.suptitle('Banzhaf Power Index Time Series: PV vs Plutocracy (Agile Configuration)', fontsize=13)
+    # ── PV plot ──
+    fig1, ax1 = plt.subplots(figsize=(10, 6))
+    for cat, color in zip(cats, colors):
+        ax1.plot(df['day'], df[f'pv_{cat}'], label=cat, color=color, linewidth=1.8)
+    ax1.axvline(x=180, color='grey', linestyle='--', alpha=0.4, label='T1 (180d)')
+    ax1.axvline(x=365, color='grey', linestyle=':',  alpha=0.4, label='T2 (365d)')
+    ax1.set_xlabel('Days')
+    ax1.set_ylabel('Banzhaf Power Index')
+    ax1.legend(fontsize=9)
+    ax1.grid(True, alpha=0.2)
     plt.tight_layout()
-    plt.savefig('banzhaf_benchmark.png', dpi=150, bbox_inches='tight')
+    plt.savefig('banzhaf_pv.png', dpi=150, bbox_inches='tight')
+    plt.show()
+
+    # ── Plutocracy plot ──
+    fig2, ax2 = plt.subplots(figsize=(10, 6))
+    for cat, color in zip(cats, colors):
+        ax2.plot(df['day'], df[f'pluto_{cat}'], label=cat, color=color, linewidth=1.8)
+    ax2.axvline(x=180, color='grey', linestyle='--', alpha=0.4, label='T1 (180d)')
+    ax2.axvline(x=365, color='grey', linestyle=':',  alpha=0.4, label='T2 (365d)')
+    ax2.set_xlabel('Days')
+    ax2.set_ylabel('Banzhaf Power Index')
+    ax2.legend(fontsize=9)
+    ax2.grid(True, alpha=0.2)
+    plt.tight_layout()
+    plt.savefig('banzhaf_plutocracy.png', dpi=150, bbox_inches='tight')
     plt.show()
 
 
