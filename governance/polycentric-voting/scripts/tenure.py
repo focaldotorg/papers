@@ -1,8 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+T_MAX=720
+T_PERIOD=800
 
-# ─── Effective time with dilution / withdrawal ────────────────────────────────
+SMALL_SINGLETON_EVENTS = [(0, 100)]
+MAJOR_DYNAMIC_EVENTS = [ (0,   2000), (180, -1000), (365,  2000), (540, -1000) ]
+
+COLORS = {'Dynamic': '#ff7f0e', 'Singleton': 'b', }
+STRATEGIES = {
+    'Dynamic':   MAJOR_DYNAMIC_EVENTS,
+    'Singleton': SMALL_SINGLETON_EVENTS,
+}
 
 def calculate_effective_time(events, day):
     current_shares = 0
@@ -22,47 +31,22 @@ def calculate_effective_time(events, day):
         elif delta < 0:
             withdraw = min(abs(delta), current_shares)
             current_shares = max(0, current_shares - withdraw)
+
+    if (current_t_eff > T_MAX):
+        return T_MAX
+
     return current_t_eff
 
-
-# ─── Strategy definitions ─────────────────────────────────────────────────────
-
-# Major holder — dynamic strategy (2000 tokens, withdrawals and deposits)
-MAJOR_DYNAMIC_EVENTS = [
-    (0,   2000),
-    (180, -1000),
-    (365,  2000),
-    (540, -1000),
-]
-
-# Small holder — singleton strategy (100 tokens, held to maturity)
-SMALL_SINGLETON_EVENTS = [(0, 100)]
-
-STRATEGIES = {
-    'Major — Dynamic':   MAJOR_DYNAMIC_EVENTS,
-    'Small — Singleton': SMALL_SINGLETON_EVENTS,
-}
-
-COLORS = {
-    'Major — Dynamic':   '#d62728',
-    'Small — Singleton': '#1f77b4',
-}
-
-
-# ─── Simulation ───────────────────────────────────────────────────────────────
-
-days_range = np.arange(0, 731, 1)
+days_range = np.arange(0, T_PERIOD, 1)
 
 t_eff_results = {}
 for strategy, events in STRATEGIES.items():
     t_eff_results[strategy] = [calculate_effective_time(events, d) for d in days_range]
 
-# rho = variance of t_effective over time per strategy
 rho_results = {}
 for strategy, t_effs in t_eff_results.items():
     rho_results[strategy] = [np.var(t_effs[:i+1]) for i in range(len(days_range))]
 
-# tau = slope of rho up to each day via linear regression
 tau_results = {}
 for strategy, rho in rho_results.items():
     tau_series = []
@@ -77,32 +61,34 @@ for strategy, rho in rho_results.items():
     tau_results[strategy] = tau_series
 
 
-# ─── Plot tenure ──────────────────────────────────────────────────────────────
-
 fig, ax = plt.subplots(figsize=(11, 6))
 
 for strategy, tau in tau_results.items():
     ax.plot(days_range, tau, color=COLORS[strategy], linewidth=2.0, label=strategy)
 
-ax.axvline(x=180, color='grey', linestyle='--', alpha=0.4, label='T1 (180d)')
-ax.axvline(x=365, color='grey', linestyle=':',  alpha=0.4, label='T2 (365d)')
+ax.axvline(x=180, color='grey', linestyle='--', alpha=0.4)
+ax.axvline(x=365, color='grey', linestyle='--', alpha=0.4)
 
-# Dynamic event markers
+ax.text(180, ax.get_ylim()[1], 'T1 (180d)', 
+        color='black', alpha=1, fontsize=9,
+        ha='center', va='bottom')
+ax.text(365, ax.get_ylim()[1], 'T2 (365d)', 
+        color='black', alpha=1, fontsize=9,
+        ha='center', va='bottom')
+
+
 for event_day, delta in MAJOR_DYNAMIC_EVENTS[1:]:
-    ax.axvline(x=event_day, color='red', linestyle=':', alpha=0.2)
+    ax.axvline(x=event_day, color='#ff7f0e', linestyle=':', alpha=0.7)
     ax.text(event_day + 4, max(max(t) for t in tau_results.values()) * 0.95,
-            f'{"+" if delta > 0 else ""}{delta:,}', fontsize=7, color='red', alpha=0.7)
+            f'{"+" if delta > 0 else ""}{delta:,}', fontsize=7, fontweight=600, color='#ff7f0e', alpha=0.7)
 
-ax.set_xlabel('Days')
-ax.set_ylabel('τ (Slope of ρ)')
+ax.set_xlabel('Time (days)')
+ax.set_ylabel('Tenure (τ)')
 ax.legend(fontsize=10)
 ax.grid(True, alpha=0.2)
 plt.tight_layout()
 plt.savefig('tenure_benchmark.png', dpi=150, bbox_inches='tight')
 plt.show()
-
-
-# ─── Tenure table ─────────────────────────────────────────────────────────────
 
 checkpoints = [90, 180, 365, 540, 720]
 print(f"\n{'Strategy':<22} " + " ".join(f"{'d='+str(d):<10}" for d in checkpoints))

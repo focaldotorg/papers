@@ -1,9 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+T_MAX=720
+T_PERIOD=721
+
+COLORS = {'Singleton': 'b', 'Sequential': '#2ca02c', 'Splitting': 'r', 'Dynamic': 'orange'}
+STRATEGIES = {
+    'Singleton':  [(0, 10000)],
+    'Sequential': [(0, 3333), (90, 1667), (180, 2500), (270, 2500)],
+    'Splitting':  [(0, 1000)],   # 10x accounts of 1000
+    'Dynamic':    [(0, 5000), (180, -2500), (365, 5000), (540, -2500)],
+}
 
 def calculate_effective_time(events, days):
-    """Deposits dilute t_effective, withdrawals preserve t_effective but reduce balance."""
     current_shares = 0
     current_t_eff  = 0
     for event_day, delta in sorted(events):
@@ -20,6 +29,10 @@ def calculate_effective_time(events, days):
             current_shares += delta
         elif delta < 0:
             current_shares = max(0, current_shares + delta)
+
+    if (current_t_eff > T_MAX):
+        return T_MAX, current_shares
+
     return current_t_eff, current_shares
 
 
@@ -56,16 +69,6 @@ def calculate_voting_power(total_tokens, time_weight, alpha):
     return time_weight * (alpha * total_tokens + np.sqrt(total_tokens) * (1 - alpha))
 
 
-# ─── Strategy event definitions ───────────────────────────────────────────────
-
-STRATEGIES = {
-    'Singleton':  [(0, 10000)],
-    'Sequential': [(0, 3333), (90, 1667), (180, 2500), (270, 2500)],
-    'Splitting':  [(0, 1000)],   # 10x accounts of 1000
-    'Dynamic':    [(0, 5000), (180, -2500), (365, 5000), (540, -2500)],
-}
-
-
 def simulate_strategy(name, events, days_range):
     voting_powers = []
     for days in days_range:
@@ -85,38 +88,29 @@ def simulate_strategy(name, events, days_range):
     return voting_powers
 
 
-# ─── Simulation ───────────────────────────────────────────────────────────────
-
-days_range = np.arange(0, 731, 20)
+days_range = np.arange(0, T_PERIOD, 20)
 
 results = {name: simulate_strategy(name, events, days_range)
            for name, events in STRATEGIES.items()}
-
-# ─── Plot ─────────────────────────────────────────────────────────────────────
-
-COLORS = {'Singleton': 'b', 'Sequential': 'g', 'Splitting': 'r', 'Dynamic': 'orange'}
 
 fig, ax = plt.subplots(figsize=(12, 8))
 
 for name, powers in results.items():
     ax.plot(days_range, powers, color=COLORS[name], linewidth=2.5, label=name, alpha=0.9)
 
-phase_colors     = ['lightblue', 'lightgreen', 'lightyellow']
-phase_boundaries = [180, 365, 730]
-phase_labels     = ['T1\n(180d)', 'T2\n(365d)', 'T3\n(730d)']
-prev = 0
-for end, color, label in zip(phase_boundaries, phase_colors, phase_labels):
-    ax.axvspan(prev, end, alpha=0.1, color=color)
-    ax.text((prev + end) / 2, ax.get_ylim()[1] if ax.get_ylim()[1] > 0 else 1,
-            label, ha='center', va='top', fontsize=8, color='grey')
-    prev = end
+ax.axvline(x=180, color='grey', linestyle='--', alpha=0.4)
+ax.axvline(x=365, color='grey', linestyle='--', alpha=0.4)
 
-for day in [180, 365]:
-    ax.axvline(x=day, color='grey', linestyle='--', alpha=0.3)
+ax.text(180, ax.get_ylim()[1], 'T1 (180d)', 
+        color='black', alpha=1, fontsize=9,
+        ha='center', va='bottom')
+ax.text(365, ax.get_ylim()[1], 'T2 (365d)', 
+        color='black', alpha=1, fontsize=9,
+        ha='center', va='bottom')
 
-ax.set_xlabel('Time (Days)', fontsize=12, weight='bold')
-ax.set_ylabel('Voting Power ($V_P$)', fontsize=12, weight='bold')
-ax.set_xlim(0, 730)
+ax.set_xlabel('Time (days)', fontsize=12)
+ax.set_ylabel('Voting Power ($V_P$)', fontsize=12)
+ax.set_xlim(0, T_PERIOD)
 ax.set_ylim(bottom=0)
 ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
 ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{int(x)}'))
@@ -127,9 +121,7 @@ plt.tight_layout()
 plt.savefig('strategies.png', dpi=150, bbox_inches='tight')
 plt.show()
 
-# ─── Benchmark table ──────────────────────────────────────────────────────────
-
-checkpoints = [90, 180, 365, 730]
+checkpoints = [90, 180, 365, T_PERIOD - 1]
 print(f"\n{'Strategy':<12} {'3M':<10} {'6M':<10} {'12M':<10} {'24M':<10} {'Impact':<8}")
 print("-" * 58)
 for name, powers in results.items():

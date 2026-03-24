@@ -1,115 +1,73 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+T_MAX = 720
+T_PERIOD = 900
 
-# ─── Effective time with dilution / withdrawal ────────────────────────────────
+SINGLETON_EVENTS  = [(0, 10000)]
+SEQUENTIAL_EVENTS = [(0, 3333), (90, 1667), (180, 2500), (270, 2500)]
+DYNAMIC_EVENTS    = [(0, 5000), (180, -2500), (365, 5000), (540, -2500)]
+
+TRANCHE_MARKERS = [(180, 'T$_1$ (180d)'), (365, 'T$_2$ (365d)')]
+STRATEGIES = {
+    'Singleton':  (SINGLETON_EVENTS,  'b'),
+    'Sequential': (SEQUENTIAL_EVENTS, '#2ca02c'),
+    'Dynamic':    (DYNAMIC_EVENTS,    '#ff7f0e'),
+}
 
 def calculate_effective_time(events, day):
-    """
-    events: list of (day, delta_tokens) — positive = deposit, negative = withdrawal
-    """
-    current_shares = 0
-    current_t_eff  = 0
-
+    shares, t_eff = 0, 0
     for event_day, delta in sorted(events):
         if event_day > day:
             break
-
-        elapsed = day - event_day
-
         if delta > 0:
-            # Deposit — dilutes t_effective
-            if current_shares + delta == 0:
-                current_t_eff = 0
-            else:
-                numerator     = (current_shares * current_t_eff) + (delta * elapsed)
-                denominator   = current_shares + delta
-                current_t_eff = numerator / denominator
-            current_shares += delta
-
+            elapsed = day - event_day
+            t_eff = (shares * t_eff + delta * elapsed) / (shares + delta) if (shares + delta) else 0
+            shares += delta
         elif delta < 0:
-            # Withdrawal — preserves t_effective, reduces shares
-            withdraw = min(abs(delta), current_shares)
-            current_shares = max(0, current_shares - withdraw)
-            # t_effective preserved on withdrawal per equation 1
-
-    return current_t_eff
+            shares = max(0, shares - min(abs(delta), shares))
+    return min(t_eff, T_MAX)
 
 
-# ─── Strategy definitions ─────────────────────────────────────────────────────
+def plot_strategy(ax, label, events, color):
+    days = np.arange(0, T_PERIOD)
+    t_effs = [calculate_effective_time(events, d) for d in days]
+    ax.plot(days, t_effs, color=color, linewidth=2.0, label=label)
 
-# Singleton: 10000 tokens deposited at day 0, held to maturity
-SINGLETON_EVENTS = [(0, 10000)]
+    # Tranche markers
+    for day, marker_label in TRANCHE_MARKERS:
+        ax.axvline(x=day, color='grey', linestyle='--', alpha=0.4)
+        ax.text(day, ax.get_ylim()[1], marker_label,
+                color='black', fontsize=8, ha='center', va='bottom')
 
-# Sequential: staged deposits totalling 10000
-SEQUENTIAL_EVENTS = [(0, 3333), (90, 1667), (180, 2500), (270, 2500)]
+    if label == 'Dynamic' or label == 'Sequential':
 
-# Dynamic: deposits and withdrawals throughout lifecycle
-DYNAMIC_EVENTS = [
-    (0,   5000),   # initial deposit
-    (180, -2500),  # partial withdrawal at T1
-    (365,  5000),  # large deposit at T2
-    (540, -2500),  # partial withdrawal
-]
+        for event_day, delta in events[1:]:
+            ax.axvline(x=event_day, color=color, linestyle=':', alpha=0.7)
+            ax.text(event_day + 4, ax.get_ylim()[1] * 0.9,
+                    f'{"+" if delta > 0 else ""}{delta:,}',
+                    fontsize=7, color=color, fontweight=600, alpha=0.8)
 
-STRATEGIES = {
-    'Singleton':  SINGLETON_EVENTS,
-    'Sequential': SEQUENTIAL_EVENTS,
-    'Dynamic':    DYNAMIC_EVENTS,
-}
-
-COLORS = {
-    'Singleton':  '#1f77b4',
-    'Sequential': '#2ca02c',
-    'Dynamic':    '#ff7f0e',
-}
-
-
-# ─── Simulation ───────────────────────────────────────────────────────────────
-
-days_range = np.arange(0, 731, 1)
-
-results = {}
-for strategy, events in STRATEGIES.items():
-    results[strategy] = [calculate_effective_time(events, d) for d in days_range]
+    ax.set_xlim(0, T_PERIOD)
+    ax.set_ylim(0, T_MAX + 40)
+    ax.set_title(label, fontsize=12, pad=20)
+    ax.set_xlabel('Time (days)', fontsize=9)
+    ax.set_ylabel('Effective Time ($t_{\\mathrm{effective}}$)', fontsize=9)
+    ax.grid(True, alpha=0.2)
+    ax.tick_params(labelsize=8)
 
 
-# ─── Plot ─────────────────────────────────────────────────────────────────────
+days_range = np.arange(0, T_PERIOD)
 
-fig, ax = plt.subplots(figsize=(11, 6))
+fig, axes = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
 
-for strategy, t_effs in results.items():
-    ax.plot(days_range, t_effs, label=strategy, color=COLORS[strategy], linewidth=2.0)
+for ax, (label, (events, color)) in zip(axes, STRATEGIES.items()):
+    plot_strategy(ax, label, events, color)
 
-# Raw days reference
-ax.plot(days_range, days_range, color='grey', linestyle='--', linewidth=1.2,
-        alpha=0.5, label='Raw Days (no dilution)')
+# Remove duplicate y-axis labels on shared axes
+for ax in axes[1:]:
+    ax.set_ylabel('')
 
-# Tranche markers
-ax.axvline(x=180, color='grey', linestyle='--', alpha=0.4, label='T1 (180d)')
-ax.axvline(x=365, color='grey', linestyle=':',  alpha=0.4, label='T2 (365d)')
-
-# Dynamic event markers
-for event_day, delta in DYNAMIC_EVENTS[1:]:
-    label = f'{"+" if delta > 0 else ""}{delta:,}'
-    ax.axvline(x=event_day, color='orange', linestyle=':', alpha=0.3)
-    ax.text(event_day + 4, ax.get_ylim()[1] * 0.95 if ax.get_ylim()[1] > 0 else 1,
-            label, fontsize=7, color='orange', alpha=0.8)
-
-ax.set_xlabel('Days')
-ax.set_ylabel('$t_{\\mathrm{effective}}$ (days)')
-ax.legend(fontsize=9)
-ax.grid(True, alpha=0.2)
 plt.tight_layout()
 plt.savefig('path_dependency.png', dpi=150, bbox_inches='tight')
 plt.show()
-
-
-# ─── Tenure table ─────────────────────────────────────────────────────────────
-
-checkpoints = [90, 180, 365, 540, 720]
-print(f"\n{'Strategy':<12} " + " ".join(f"{'d='+str(d):<10}" for d in checkpoints))
-print("-" * 70)
-for strategy, t_effs in results.items():
-    vals = [f"{t_effs[d]:<10.1f}" for d in checkpoints]
-    print(f"{strategy:<12} " + " ".join(vals))

@@ -233,7 +233,6 @@ To replicate a more realistic distribution, shareholder actors from each tier ar
 
 \begin{table}[h!]
 \centering
-% --- Full-width distribution table ---
 \begin{tabularx}{\textwidth}{>{\bfseries}l >{\bfseries}X >{\centering\arraybackslash}X 
                                      >{\centering\arraybackslash}X 
                                      >{\centering\arraybackslash}X 
@@ -242,30 +241,29 @@ To replicate a more realistic distribution, shareholder actors from each tier ar
 \textbf{Category} & \textbf{Tier} & \textbf{Shares per} & \textbf{Count} & \textbf{Total} & \textbf{Percent} \\
 \midrule
 \multirow{5}{*}{Stakeholders}
- & Major  & 2,000 & 5   & 10,000 & 10.0\% \\
- & Large  & 1,000 & 10  & 10,000 & 10.0\% \\
+ & Major  & 2,000 & 6   & 12,000 & 12.0\% \\
+ & Large  & 1,000 & 12  & 12,000 & 12.0\% \\
  & Median & 500   & 20  & 10,000 & 10.0\% \\
  & Minor  & 200   & 40  & 8,000  & 8.0\%  \\
- & Small  & 100   & 70  & 7,000  & 7.0\%  \\
+ & Small  & 100   & 80  & 8,000  & 8.0\%  \\
 \cmidrule(lr){2-6}
- & \textit{Subtotal} & – & 145 & 45,000 & 45.0\% \\
+ & \textit{Subtotal} & – & 158 & 50,000 & 50.0\% \\
 \midrule
 Operations & – & 40,000 & 1 & 40,000 & 40.0\% \\
-Liquidity  & – & 15,000 & 1 & 15,000 & 15.0\% \\
+Liquidity  & – & 10,000 & 1 & 10,000 & 10.0\% \\
 \midrule
-\textbf{Total Supply} & – & – & 147 & 100,000 & 100.0\% \\
+\textbf{Total Supply} & – & – & 160 & 100,000 & 100.0\% \\
 \bottomrule
 \end{tabularx}
 \vspace{0.15em}
-% --- Full-width onboarding schedule ---
 \begin{tabularx}{\textwidth}{l*{6}{>{\centering\arraybackslash}X}}
 \textbf{Day} & \textbf{Major} & \textbf{Large} & \textbf{Median} & \textbf{Minor} & \textbf{Small} & \textbf{Holders} \\
 \midrule
-0   & 1 & 2  & 3  & 6  & 4  & 16  \\
-20  & 2 & 4  & 7  & 14 & 14 & 41  \\
-40  & 3 & 7  & 12 & 25 & 32 & 79  \\
-60  & 4 & 9  & 17 & 35 & 53 & 118 \\
-80  & 5 & 10 & 20 & 40 & 70 & 145 \\
+0   & 1 & 2  & 3  & 6  & 8  & 20  \\
+20  & 2 & 4  & 7  & 14 & 24 & 51  \\
+40  & 3 & 7  & 12 & 25 & 36 & 83  \\
+60  & 4 & 10 & 17 & 35 & 57 & 123 \\
+80  & 6 & 12 & 20 & 40 & 80 & 158 \\
 \bottomrule
 \end{tabularx}
 \caption{Share distribution and onboarding schedule}
@@ -280,7 +278,7 @@ Following the distribution in table 3, we can plot the configurations for agile 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{power_distribution_agile.png}
+    \includegraphics[width=0.85\textwidth]{power_progression_agile.png}
     \caption{Agile power progression series}
     \label{fig:gini}
 \end{figure}
@@ -291,7 +289,7 @@ The agile configuration shows two discrete power accumulation points at $T_1$ an
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{power_distribution_graduated.png}
+    \includegraphics[width=0.85\textwidth]{power_progression_graduated.png}
     \caption{Graduated power progression series}
     \label{fig:gini}
 \end{figure}
@@ -382,14 +380,19 @@ Dynamic & 656 $V_{p}$/s & 210 $V_{p}$/s & 555 $V_{p}$/s & 1,090 $V_{p}$/s & 628 
 
 While token-splitting is advantageous in the short-term, it ultimately fails to increase voting power over time but actually expenses a stakeholder's governance influence by approximately 50\% due to the time weighting loss. Following the Nash  equilibrium theorem, we can identify the Singleton strategy as the dominant strategy, the Sequential strategy as the equilibrium strategy and the Splitting strategy as the suboptimal strategy.
 
-\section{Ergodicity}
+\section{Commitment Profiles}
+
+Plotting the effective time series for the predefined strategies we can see some interesting realisations, where the small but tactical deposits of the Sequential strategy dilutes proportionally with larger divergence. On the contrary to the Dynamic strategy, reducing their inventory without effect in $T_1$ and then adding shares resulting in over a 65\%  dilution to rebalance.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{path_dependency.png}
+    \hspace*{-1cm}
+    \includegraphics[width=1.10\textwidth]{path_dependency.png}
     \caption{Strategy effective time series}
     \label{fig:teffective}
 \end{figure}
+
+The findings become more even compelling when $\rho$ is plotted for the equivalent strategies, we get a clear sense of each stakeholders trajectory. 
 
 \begin{figure}[H]
     \centering
@@ -400,18 +403,20 @@ While token-splitting is advantageous in the short-term, it ultimately fails to 
 
 \begin{table}[H]
 \centering
-\begin{tabularx}{\textwidth}{l*{5}{>{\centering\arraybackslash}X}}
+\begin{tabularx}{\textwidth}{l*{6}{>{\centering\arraybackslash}X}}
 \toprule
-Strategy & d=90 & d=180 & d=365 & d=540 & d=720 \\
+Strategy & d=90 & d=180 & d=365 & d=540 & d=720 & d=1220 \\
 \midrule
-Singleton & 7.67 & 15.17 & 30.58 & 45.17 & 60.17 \\
-Sequential & 7.65 & 8.10 & 9.33 & 18.90 & 35.20 \\
-Dynamic & 7.67 & 15.17 & 30.58 & 22.53 & 17.89 \\
+Singleton  & 7.6667 & 15.1667 & 30.5833 & 45.1667 & 60.1667 & 61.8621 \\
+Sequential & 7.6524 & 8.1008  & 9.3261  & 18.8994 & 35.1995 & 64.8773 \\
+Dynamic    & 7.6667 & 15.1667 & 30.5797 & 22.5281 & 17.8860 & 44.1028 \\
 \bottomrule
 \end{tabularx}
 \caption{Strategy tenure ($\tau$) by commitment trajectory}
 \label{tab:tenure}
 \end{table}
+
+Furthermore calculating the $\tau$ values concretely quantifies a rate of change for commitment. Sequential strategy growing at an exponent rate at the later point in the series from compounding deposits, Singleton dominating early and finally Dynamic strategy clearly regressing $T_2$ reduction but rebounding towards $t_{max}$.
 
 \begin{figure}[H]
     \centering
@@ -420,7 +425,7 @@ Dynamic & 7.67 & 15.17 & 30.58 & 22.53 & 17.89 \\
     \label{fig:tenurei}
 \end{figure}
 
-\newpage
+Although the Dynamic strategy has a x20 capital dominance, its disparity in trajectory results in a regression in tenure from dilution, in contrast to the Singleton strategy which outperforms as expected. Proving that $\rho$ and thus $\tau$ are not reducible to capital alone but is composed of a sequential maps of actions and time.
 
 \section{Emergent Properties}
 
@@ -429,6 +434,12 @@ Every vote is implicitly backed by a verifiable profile $t_{\text{effective}}$, 
 
 \subsection{Coalition building}
 By introducing opacity in power progression, the model naturally incentivises cooperation, where participants within similar time-weighted tranches find strategic alignment. This creates an emergent governance landscape where shared experience and comparable power levels encourage collaborative strategies.  
+
+\subsection{Sybil Resistance}
+While PV does not prohibit token splitting but renders it structurally self-defeating. A participant fragmenting a position across $n$ accounts of equal denomination trades a single consolidated $t_{\mathrm{effective}}$ trajectory for $n$ independent trajectories, each accumulating commitment in isolation. The quadratic benefit of splitting is temporary. as $\alpha$ progresses toward 1.0, the linear weighting of the consolidated position dominates and the fragmented accounts collectively underperform by approximately 50\% at maturity. 
+
+\subsection{Competitive Hierarchy}
+The dilution mechanics of $t_{\mathrm{effective}}$ continuously rebalance governance authority in response to changes in share supply. When new shares enter the system, existing commitment trajectories are diluted proportionally, compressing the advantage of established holders and creating competitive space for incoming participants, producing a self-regulating hierarchy.
 
 \subsection{Graduated proposals}
 Given the nature of the nuance of voting demographics in PV, the only logical decision to replicate that on the application layer is through tiered proposals by severity. Each with equivalent quorum and duration parameters to match, this mediates any short term advantages in voting power for any critical decisions through continuous voting periods plus caters to agile and effective decision making for lower severity ballots. 
@@ -444,6 +455,7 @@ Delegation in PV supports several configurations, with full restriction (\textbf
 \textbf{Expirations}: Given that voting power in transient in PV, it is advised to config a maximum delegation period due to the fact of idle delegations accrue significant voting power over-time which sometimes delegators become unaware to prior arrangements. 
 
 \subsection{Vote Leasing}
+
 While vote leasing in stakeholder governance has long been scrutinised, PV's time-stratified structure transforms these dynamics by creating significant friction for governance attacks. Unlike pure plutocracy where 51\% control requires acquiring tokens equivalent to that voting threshold, PV delegation attacks face compounding constraints: limited market depth and fragmented negotiations across stakeholders with heterogeneous time weights - shifting governance attacks \textbf{from capital allocation problems to multi-period coordination challenges} with significantly higher execution risk.
 
 While identifying the potential risks of vote leasing we can also weigh its potential benefits, such as bolstering the incentives to contribute to organisational governance given that influence becomes an inherent economic incentive to stakeholders and who can hedge against secondary market exposure through leasing to retain their commitment. 
@@ -457,7 +469,7 @@ Leased positions are not empty votes, while delegation carries the delegator's f
 
 \section{Polycentrism}
 
-Ostrom (1990) identified eight design principles that characterise sustainable collective governance institutions. We map each principle to the properties of Polycentric Voting to demonstrate that PV satisfies the empirical conditions for effective collective governance by construction rather than by approximation: \\
+Ostrom (1990) identified eight design principles that characterise sustainable collective governance institutions and that sustainable systems as polycentric in nature. So we map her 8 framework empirical conditions for effective common governance by construction rather than by approximation: \\
 
 \begin{enumerate}
 \item \textbf{Clearly Defined Boundaries:} PV defines participation boundaries through share ownership and commitment trajectory. The governance system knows exactly who is participating, with what capital, and for how long. $t_{\mathrm{effective}}$ creates a second boundary layer not just who holds shares but who has demonstrated commitment. Participation is clearly defined on both the capital and temporal axes.
@@ -472,7 +484,7 @@ Ostrom (1990) identified eight design principles that characterise sustainable c
 
 \item \textbf{Conflict Resolution Mechanisms:} Delegation in PV retains full revocability by the delegator at any time, even during an active proposal. A participant who delegates authority and subsequently disagrees with how it is being exercised can unconditionally reclaim their voting power without requiring a new proposal or external arbitration. Revocability is the conflict resolution primitive disputes over delegated authority are resolved immediately and unilaterally by the party whose commitment profile backs the authority.
 
-\item \textbf{Recognition of Rights to Organise:} PV facilitates the right to self-organise through the normalisation of voting power across graduated time weight tranches. Participants within equivalent commitment tiers share comparable influence, creating conditions for natural coalition formation without requiring external coordination or permission. The emergent demographic stratification produced by the tranche structure where participants of similar tenure find strategic alignment  is polycentrism's self-organising property formalised as a mechanical consequence of the commitment architecture.
+\item \textbf{Recognition of Rights to Organise:} PV facilitates the right to self-organise through the normalisation of voting power across graduated time weight tranches. Participants within equivalent commitment tiers share comparable influence, creating conditions for natural coalition formation without requiring external coordination or permission. The emergent demographic stratification produced by the tranche structure where participants of similar tenure find strategic alignment is polycentrisms self-organising property formalised as a mechanical consequence of the commitment architecture.
 
  \item \textbf{Nested Enterprises:} The three orthogonal axes of authority capital, time weight and tenure create nested layers of governance that satisfy both Polanyi's structural definition of polycentrism and Ostrom's nested enterprise principle simultaneously. No single axis dominates, each layer carries independent authority, and composite voting power emerges from their interaction. Consequential decisions require convergence across all three axes while routine decisions resolve within a single tier a nested governance architecture formalised mathematically.
 \end{enumerate}
@@ -481,11 +493,13 @@ Ostrom (1990) identified eight design principles that characterise sustainable c
 
 PV satisfies Polyani's structural definition by construction. Capital, time weight and tenure constitute three genuinely independent axes of authority, each computable from first principles and none reducible to the others. A participant cannot maximise all three simultaneously through capital alone — tenure must be earned through commitment consistency, time weight through sustained participation. No single actor can dominate all three axes simultaneously, and the composite governance hierarchy that emerges is therefore resistant to the concentration that undermines plutocratic systems. This is polycentrism not as an aspiration but as a mathematical property of the mechanism.
 
+\newpage
+
 \section{Limitations}
 
-    \textbf{Simulation sample distribution} assumes a simplified holder distribution with fixed share allocations and a controlled onboarding schedule. Real governance distributions are more heterogeneous and the competitive dynamics observed may differ under alternative configurations. Results should be interpreted as illustrative of the mechanism's properties rather than predictive of any specific deployment. 
+\textbf{Simulation sample distribution} assumes a simplified holder distribution with fixed share allocations and a controlled onboarding schedule. Real governance distributions are more heterogeneous and the competitive dynamics observed may differ under alternative configurations. Results should be interpreted as illustrative of the mechanism's properties rather than predictive of any specific deployment. 
     
- \textbf{Tenure as a signal} mechanism and not an enforceable governance primitive in its current formulation. Its informational value compounds with organisational age and is negligible in early stage governance where longitudinal commitment data is insufficient to distinguish trajectories meaningfully. 
+\textbf{Tenure as a signal} mechanism and not an enforceable governance primitive in its current formulation. Its informational value compounds with organisational age and is negligible in early stage governance where longitudinal commitment data is insufficient to distinguish trajectories meaningfully. 
     
 \textbf{Delegation market risk} remains the most credible attack vector. While high $\tau$ positions are supply constrained by construction and delegated authority retains the delegator's commitment profile, the emergence of secondary markets around governance legitimacy cannot be structurally eliminated — only made economically costly relative to direct participation.
 
@@ -493,8 +507,6 @@ PV satisfies Polyani's structural definition by construction. Capital, time weig
 
 Polycentric voting is a governance model to align the interests of an organisation with its participants and makes power dynamics explicit, rather than opaque, creating more strategic and nuanced governance. \\\\
 It provides a more robust and efficient voting model for organisations versus pure plutocracy and is the closest mathematical representation of human decision-making, commitment, and loyalty within organisational systems.
-
-\newpage
 
 \section{References}
 

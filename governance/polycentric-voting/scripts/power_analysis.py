@@ -1,9 +1,31 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
 from math import ceil
 
-# ─── Banzhaf (Puentedura 2004) ────────────────────────────────────────────────
+T_MAX = 720
+RMIN = 0.2
+RMAX = 1.0
+SCALE = 100
+
+AGILE_TRANCHES = [
+    {"max_days": 180,          "P": 0.2},
+    {"max_days": 365,          "P": 0.8},
+    {"max_days": float('inf'), "P": 1.0},
+]
+
+CAT_COLORS = ['#1565C0', '#42A5F5', '#66BB6A', '#EF5350', '#FF8A65' ]
+CAT_TOKENS = {'Major': 2000, 'Large': 1000, 'Median': 500, 'Minor': 200, 'Small': 100}
+SCHEDULE = {
+    0:  {'Major': 1, 'Large': 2,  'Median': 3,  'Minor': 6,  'Small': 8},
+    20: {'Major': 2, 'Large': 4,  'Median': 7,  'Minor': 14, 'Small': 24},
+    40: {'Major': 3, 'Large': 7,  'Median': 12, 'Minor': 25, 'Small': 36},
+    60: {'Major': 4, 'Large': 10,  'Median': 17, 'Minor': 35, 'Small': 57},
+    80: {'Major': 6, 'Large': 12, 'Median': 20, 'Minor': 40, 'Small': 80},
+}
+
+# ─── Banhaf power index (Puentedura 2004) ────────────────────────────────────────────────
 
 def banzhaf(weight, quota):
     max_order = sum(weight)
@@ -29,18 +51,7 @@ def banzhaf(weight, quota):
     total_power = sum(banzhaf_power)
     return [float(p) / total_power if total_power > 0 else 0.0 for p in banzhaf_power]
 
-
-# ─── PV Engine ────────────────────────────────────────────────────────────────
-
-AGILE_TRANCHES = [
-    {"max_days": 180,          "P": 0.2},
-    {"max_days": 365,          "P": 0.8},
-    {"max_days": float('inf'), "P": 1.0},
-]
-TMAX = 720
-RMIN = 0.2
-RMAX = 1.0
-
+# ──────────────────────────────────────────────────────────────────────────────────
 
 def calculate_time_weight(t_effective):
     weight = 0
@@ -56,10 +67,13 @@ def calculate_time_weight(t_effective):
         prev = limit
         if remaining <= 0:
             break
+    if (weight > T_MAX): 
+        return T_MAX
+
     return weight
 
 def calculate_power_ratio(t_effective):
-    progress = np.clip(t_effective / TMAX, 0, 1)
+    progress = np.clip(t_effective / T_MAX, 0, 1)
     return RMIN + (RMAX - RMIN) * (progress ** 0.1)
 
 def calculate_voting_power(tokens, t_effective):
@@ -68,21 +82,6 @@ def calculate_voting_power(tokens, t_effective):
     W     = calculate_time_weight(t_effective)
     alpha = calculate_power_ratio(t_effective)
     return W * (alpha * tokens + np.sqrt(tokens) * (1 - alpha))
-
-
-# ─── Stakeholders ─────────────────────────────────────────────────────────────
-
-SCALE = 100
-
-CAT_TOKENS = {'Major': 2000, 'Large': 1000, 'Median': 500, 'Minor': 200, 'Small': 100}
-
-SCHEDULE = {
-    0:  {'Major': 1, 'Large': 2,  'Median': 3,  'Minor': 6,  'Small': 4},
-    20: {'Major': 2, 'Large': 4,  'Median': 7,  'Minor': 14, 'Small': 14},
-    40: {'Major': 3, 'Large': 7,  'Median': 12, 'Minor': 25, 'Small': 32},
-    60: {'Major': 4, 'Large': 9,  'Median': 17, 'Minor': 35, 'Small': 53},
-    80: {'Major': 5, 'Large': 10, 'Median': 20, 'Minor': 40, 'Small': 70},
-}
 
 def build_stakeholders():
     all_s = []
@@ -93,9 +92,6 @@ def build_stakeholders():
                 all_s.append({'category': cat, 'join_day': day, 'tokens': CAT_TOKENS[cat]})
             prev[cat] = count
     return all_s
-
-
-# ─── Simulation ───────────────────────────────────────────────────────────────
 
 def run_banzhaf_benchmark(max_days=720, step=5):
     stakeholders = build_stakeholders()
@@ -131,34 +127,48 @@ def run_banzhaf_benchmark(max_days=720, step=5):
     return pd.DataFrame(records)
 
 
-# ─── Plot ─────────────────────────────────────────────────────────────────────
-
 def plot_banzhaf(df):
     cats   = list(CAT_TOKENS.keys())
-    colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+    colors = CAT_COLORS 
 
-    # ── PV plot ──
     fig1, ax1 = plt.subplots(figsize=(10, 6))
     for cat, color in zip(cats, colors):
         ax1.plot(df['day'], df[f'pv_{cat}'], label=cat, color=color, linewidth=1.8)
-    ax1.axvline(x=180, color='grey', linestyle='--', alpha=0.4, label='T1 (180d)')
-    ax1.axvline(x=365, color='grey', linestyle=':',  alpha=0.4, label='T2 (365d)')
-    ax1.set_xlabel('Days')
-    ax1.set_ylabel('Banzhaf Power Index')
+
+    ax1.axvline(x=180, color='grey', linestyle='--', alpha=0.4)
+    ax1.axvline(x=365, color='grey', linestyle='--', alpha=0.4)
+
+    ax1.text(180, ax1.get_ylim()[1], '$T_{1}$ (180d)', 
+        color='black', alpha=1, fontsize=9,
+        ha='center', va='bottom')
+    ax1.text(365, ax1.get_ylim()[1], '$T_{2}$ (365d)', 
+        color='black', alpha=1, fontsize=9,
+        ha='center', va='bottom')
+
+    ax1.set_xlabel('Time (days)')
+    ax1.set_ylabel('Banzhaf Index')
     ax1.legend(fontsize=9)
     ax1.grid(True, alpha=0.2)
     plt.tight_layout()
     plt.savefig('banzhaf_pv.png', dpi=150, bbox_inches='tight')
     plt.show()
 
-    # ── Plutocracy plot ──
     fig2, ax2 = plt.subplots(figsize=(10, 6))
     for cat, color in zip(cats, colors):
         ax2.plot(df['day'], df[f'pluto_{cat}'], label=cat, color=color, linewidth=1.8)
-    ax2.axvline(x=180, color='grey', linestyle='--', alpha=0.4, label='T1 (180d)')
-    ax2.axvline(x=365, color='grey', linestyle=':',  alpha=0.4, label='T2 (365d)')
-    ax2.set_xlabel('Days')
-    ax2.set_ylabel('Banzhaf Power Index')
+
+    ax2.axvline(x=180, color='grey', linestyle='--', alpha=0.4)
+    ax2.axvline(x=365, color='grey', linestyle='--', alpha=0.4)
+
+    ax2.text(180, ax2.get_ylim()[1], '$T_{1}$ (180d)', 
+        color='black', alpha=1, fontsize=9,
+        ha='center', va='bottom')
+    ax2.text(365, ax2.get_ylim()[1], '$T_{2}$ (365d)', 
+        color='black', alpha=1, fontsize=9,
+        ha='center', va='bottom')
+
+    ax2.set_xlabel('Time (days)')
+    ax2.set_ylabel('Banzhaf Index')
     ax2.legend(fontsize=9)
     ax2.grid(True, alpha=0.2)
     plt.tight_layout()
