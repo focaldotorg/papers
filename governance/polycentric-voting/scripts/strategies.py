@@ -58,8 +58,8 @@ def calculate_time_weight(t_effective):
     return weight
 
 
-def calculate_power_ratio(t_effective, t_max=730, r_max=1.0, r_min=0.0, k_c=0.1):
-    progress = np.clip(t_effective / t_max, 0, 1)
+def calculate_power_ratio(t_effective, t_max=720, r_max=1.0, r_min=0.2, k_c=0.1):
+    progress = np.clip(t_effective / t_max, r_min, 1)
     return r_min + (r_max - r_min) * (progress ** k_c)
 
 
@@ -122,6 +122,7 @@ plt.savefig('strategies.png', dpi=150, bbox_inches='tight')
 plt.show()
 
 checkpoints = [90, 180, 365, T_PERIOD - 1]
+
 print(f"\n{'Strategy':<12} {'3M':<10} {'6M':<10} {'12M':<10} {'24M':<10} {'Impact':<8}")
 print("-" * 58)
 for name, powers in results.items():

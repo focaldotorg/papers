@@ -83,6 +83,7 @@ plt.savefig('path_dependency_rho.png', dpi=150, bbox_inches='tight')
 plt.show()
 
 checkpoints = [90, 180, 365, 540, 720, T_PERIOD - 20 ]
+
 print(f"\n{'Strategy':<12} " + " ".join(f"{'d='+str(d):<12}" for d in checkpoints))
 print("-" * 75)
 for strategy, rho in rho_results.items():

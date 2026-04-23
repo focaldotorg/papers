@@ -56,7 +56,6 @@ def plot_strategy(ax, label, events, color):
     ax.grid(True, alpha=0.2)
     ax.tick_params(labelsize=8)
 
-
 days_range = np.arange(0, T_PERIOD)
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 5), sharey=True)

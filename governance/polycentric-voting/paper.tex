@@ -26,7 +26,7 @@
 \usepackage{float}
 
 % Page settings
-\geometry{margin=0.6in}
+\geometry{margin=0.8in}
 
 % Hyperref settings
 \hypersetup{
@@ -150,10 +150,10 @@ $P_0$ & $T_0 = 0$ days & 0.0 \\ \hline
 $P_1$ & $T_1 = 180$ days & 0.2 \\ \hline
 $P_2$ & $T_2 = 365$ days & 0.8 \\ \hline
 $P_3$ & $T_3 = 720$ days & 1.0 \\ \hline
-\cellcolor{black!60} & \cellcolor{black!60} & \cellcolor{black!60} \\ \hline
-\cellcolor{black!60} & \cellcolor{black!60} & \cellcolor{black!60} \\ \hline
-\cellcolor{black!60} & \cellcolor{black!60} & \cellcolor{black!60} \\ \hline
-\cellcolor{black!60} & \cellcolor{black!60} & \cellcolor{black!60} \\ \hline
+\cellcolor{black!30} & \cellcolor{black!30} & \cellcolor{black!30} \\ \hline
+\cellcolor{black!30} & \cellcolor{black!30} & \cellcolor{black!30} \\ \hline
+\cellcolor{black!30} & \cellcolor{black!30} & \cellcolor{black!30} \\ \hline
+\cellcolor{black!30} & \cellcolor{black!30} & \cellcolor{black!30} \\ \hline
 \end{tabular}
 \caption{Agile ($t_{\text{max}} = 720$ days, $N=3$)}
 \end{minipage}
@@ -249,8 +249,9 @@ To replicate a more realistic distribution, shareholder actors from each tier ar
 \cmidrule(lr){2-6}
  & \textit{Subtotal} & – & 158 & 50,000 & 50.0\% \\
 \midrule
-Operations & – & 40,000 & 1 & 40,000 & 40.0\% \\
+Team  & – & 10,000 & 1 & 10,000 & 10.0\% \\
 Liquidity  & – & 10,000 & 1 & 10,000 & 10.0\% \\
+Operations & – & 40,000 & 1 & 40,000 & 30.0\% \\
 \midrule
 \textbf{Total Supply} & – & – & 160 & 100,000 & 100.0\% \\
 \bottomrule
@@ -274,8 +275,16 @@ Liquidity  & – & 10,000 & 1 & 10,000 & 10.0\% \\
 
 \section{Power Progression}
 
+\subsection{Bootstrapping}
+
+Organisations looking to transition to PV have a multitude of options for configuration, such as the pre-discussed Agile or Graduated configurations when it comes to architecting a voting power curve and the parameters relevant to defining what constitutes commitment. Given the volatility of influence in PV, especially in the early stages, risks what is arguably adversarial prominence especially in the context of undertaking the Splitting strategy.   With this in mind organisations can choose precautionary measures like a) excluding time-weighting for external stakeholders until a cut off period or b) preemptively configuring  $t_{\text{effective}}$ acting as "buffer" for internal stakeholders. This provides clear internal advantage versus external stakeholders which ultimately converges when $t_{max}$ is reached,  alternatively diverges if internal actors decide to offload shares in face of decreased voting power or increase share count for reciprocal dilution. 
+
+\subsection{Results}
+
 Following the distribution in table 3, we can plot the configurations for agile (table 1) and graduated (table 2) to visualise voting power curves across different instances. 
 
+ \subsubsection{Agile}
+ 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{power_progression_agile.png}
@@ -283,9 +292,11 @@ Following the distribution in table 3, we can plot the configurations for agile 
     \label{fig:gini}
 \end{figure}
 
-The agile configuration shows two discrete power accumulation points at $T_1$ and $T_2$ retrospectively, with clear competitiveness shown between the major, large and median coalitions throughout. Ultimately over-time that the large demographic is the dominant coalition before reaching convergence towards fully linear weighting.
+The agile configuration shows two discrete power accumulation points at $T_1$ and $T_2$ retrospectively, with clear competitiveness shown between the major, large and median coalitions throughout. Ultimately over-time that the large demographic is the dominant coalition before reaching convergence towards fully linear weighting. 
 
-\vspace{10pt}
+ \subsubsection{Graduated (Bootstrapped)}
+
+To showcase bootstrapping in action, we introduce the team coalition with 10,000 shares and a buffer where $t_{\text{effective}} = T_2$ (520 days) using the graduated configuration, which accommodates for more leniency in dispersing and predicting influence. Acting as a form of mediation to initial power dynamics until convergence at $t_{max}$.
 
 \begin{figure}[H]
     \centering
@@ -294,18 +305,20 @@ The agile configuration shows two discrete power accumulation points at $T_1$ an
     \label{fig:gini}
 \end{figure}
 
+Bootstrapping gives organisations the predictability to integrate PV without the risk of adversarial control but with the flexibility to disperse or retain authority in response to power dynamics. Giving founding members assurances in how their authority will be managed relative to the benefits and risks of public market exposure - previously impossible to achieve in prior voting models.
+
 \section{Power Analysis}
 
 Using the Banzhaf power index we can approximate the basis of influence between PV and traditional shareholder governance (weighted voting) benchmarked using the Agile configuration (table 2), 
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{banzhaf_plutocracy.png}
     \caption{Plutocracy power complex series}
     \label{fig:gini}
 \end{figure}
 
-We can see an incremental but immediate transition to a static hierarchy in plutocracy, where power dynamics remain flat even with the element of time. 
+We can see an incremental but immediate transition to a static hierarchy in plutocracy, where power dynamics remain flat even with the element of time.  Whereas in the case of PV we can see a clear contention of power in the early phases of $T_1$ with clear volatility, not only this but we that dominant coalition of large reaches an even more significant threshold of power accumulation and at a later date versus plutocracy. With clear convergence back to plutocratic means towards $t_{max}$. \\
 
 \begin{figure}[h]
     \centering
@@ -314,7 +327,40 @@ We can see an incremental but immediate transition to a static hierarchy in plut
     \label{fig:gini}
 \end{figure}
 
-Whereas in the case of PV we can see a clear contention of power in the early phases of $T_1$ with clear volatility, not only this but we that dominant coalition of large reaches an even more significant threshold of power accumulation and at a later date versus plutocracy. With clear convergence back to plutocratic means towards $t_{max}$.
+Furthermore, normalising the PV power distribution to the base share scale and assigning the equivalent quota or quorum denominated in share count, portrays a different landscape. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{banzhaf_cross.png}
+    \caption{PV normalised power complex series}
+    \label{fig:gini}
+\end{figure}
+
+Immediately the inverse order is observed under the Minor and Small demographics with similar sequencing documented between Median and Large coalitions. When assuming culmative voting power as the means to justify consensus in approval or rejection of a ballot and factoring a total share count as the minimum quota. Influence becomes more volatile over smaller timespans additionally but overtime is subject to less variance.
+
+\begin{table}[h]
+\centering
+\begin{tabularx}{\textwidth}{cXXX}
+\toprule
+\textbf{Day} & \centering\textbf{Plutocracy Range} & \centering\textbf{PV Range} & \centering\arraybackslash\textbf{Normalised PV Range} \\
+\midrule
+90  & \centering 0.0728 & \centering 0.0893 & \centering\arraybackslash 0.1047 \\
+180 & \centering 0.0728 & \centering 0.1114 & \centering\arraybackslash 0.1765 \\
+270 & \centering 0.0728 & \centering 0.0996 & \centering\arraybackslash 0.1070 \\
+365 & \centering 0.0728 & \centering 0.0855 & \centering\arraybackslash 0.1314 \\
+450 & \centering 0.0728 & \centering 0.0857 & \centering\arraybackslash 0.1072 \\
+540 & \centering 0.0728 & \centering 0.0819 & \centering\arraybackslash 0.1034 \\
+630 & \centering 0.0728 & \centering 0.0804 & \centering\arraybackslash 0.1086 \\
+720 & \centering 0.0728 & \centering 0.0791 & \centering\arraybackslash 0.1559 \\
+\midrule
+\textbf{Variance} & \centering\textbf{0.000896} & \centering\textbf{0.001291} & \centering\arraybackslash\textbf{0.002257} \\
+\bottomrule
+\end{tabularx}
+\caption{Power concentration range and variance across governance models}
+\label{tab:power_range}
+\end{table}
+
+\newpage
 
 \section{Strategies}
 
@@ -337,16 +383,14 @@ A stakeholder actively manages their position through partial withdrawals and re
 
 Each strategy assumes a total allocation of 10,000 shares, where $P$ equals 0.2 at $t_p$ to 30 days, then 0.4 for 90 days, 0.6 for 180 days, 0.8 for 365 days and 1 for 720 days.
 
-\vspace{15pt}
-
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{strategies.png}
     \caption{Strategies voting power series}
     \label{fig:gini}
 \end{figure}
 
-\begin{table}[H]
+\begin{table}[h]
 \centering
 \begin{tabularx}{\textwidth}{l*{6}{>{\centering\arraybackslash}X}}
 \toprule 
@@ -362,7 +406,7 @@ Dynamic & 5,100 & 3,270 & 17,495 & 68,785 & -57\% \\
 \label{tab:strategy}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[h]
 \centering
 \begin{tabularx}{\textwidth}{l*{5}{>{\centering\arraybackslash}X}}
 \toprule 
@@ -493,8 +537,6 @@ Ostrom (1990) identified eight design principles that characterise sustainable c
 
 PV satisfies Polyani's structural definition by construction. Capital, time weight and tenure constitute three genuinely independent axes of authority, each computable from first principles and none reducible to the others. A participant cannot maximise all three simultaneously through capital alone — tenure must be earned through commitment consistency, time weight through sustained participation. No single actor can dominate all three axes simultaneously, and the composite governance hierarchy that emerges is therefore resistant to the concentration that undermines plutocratic systems. This is polycentrism not as an aspiration but as a mathematical property of the mechanism.
 
-\newpage
-
 \section{Limitations}
 
 \textbf{Simulation sample distribution} assumes a simplified holder distribution with fixed share allocations and a controlled onboarding schedule. Real governance distributions are more heterogeneous and the competitive dynamics observed may differ under alternative configurations. Results should be interpreted as illustrative of the mechanism's properties rather than predictive of any specific deployment. 
@@ -507,6 +549,12 @@ PV satisfies Polyani's structural definition by construction. Capital, time weig
 
 Polycentric voting is a governance model to align the interests of an organisation with its participants and makes power dynamics explicit, rather than opaque, creating more strategic and nuanced governance. \\\\
 It provides a more robust and efficient voting model for organisations versus pure plutocracy and is the closest mathematical representation of human decision-making, commitment, and loyalty within organisational systems.
+
+\newpage
+
+\section{Acknowledgements}
+
+Heinrich Hartmann and Ruben R. Puentedura for their work on the Python implementation of the Banzhaf index, and Professor Dennis Leech for the underlying theory originating from his work on the factorisation of polynomials in power indices.
 
 \section{References}
 
