@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 T_MAX = 720
-T_PERIOD = 1240
+T_PERIOD = 1600
 
 SINGLETON_EVENTS  = [(0, 10000)]
 SEQUENTIAL_EVENTS = [(0, 3333), (90, 1667), (180, 2500), (270, 2500)]
@@ -70,7 +70,7 @@ ax.text(180, ax.get_ylim()[1], '$T_{1}$ (180d)',
 ax.text(365, ax.get_ylim()[1], '$T_{2}$ (365d)', 
         color='black', alpha=1, fontsize=9,
         ha='center', va='bottom')
-ax.text(720, ax.get_ylim()[1], '$T_{3}$ (720d)', 
+ax.text(720, ax.get_ylim()[1], '$t_{max}$ (720d)', 
         color='black', alpha=1, fontsize=9,
         ha='center', va='bottom')
 

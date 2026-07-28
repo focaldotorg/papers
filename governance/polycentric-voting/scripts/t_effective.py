@@ -8,7 +8,7 @@ SINGLETON_EVENTS  = [(0, 10000)]
 SEQUENTIAL_EVENTS = [(0, 3333), (90, 1667), (180, 2500), (270, 2500)]
 DYNAMIC_EVENTS    = [(0, 5000), (180, -2500), (365, 5000), (540, -2500)]
 
-TRANCHE_MARKERS = [(180, 'T$_1$ (180d)'), (365, 'T$_2$ (365d)')]
+TRANCHE_MARKERS = [(180, 'T$_1$ (180d)'), (365, 'T$_2$ (365d)'), (720, '$t_{max}$ (720d)') ]
 STRATEGIES = {
     'Singleton':  (SINGLETON_EVENTS,  'b'),
     'Sequential': (SEQUENTIAL_EVENTS, '#2ca02c'),
@@ -50,7 +50,6 @@ def plot_strategy(ax, label, events, color):
 
     ax.set_xlim(0, T_PERIOD)
     ax.set_ylim(0, T_MAX + 40)
-    ax.set_title(label, fontsize=12, pad=20)
     ax.set_xlabel('Time (days)', fontsize=9)
     ax.set_ylabel('Effective Time ($t_{\\mathrm{effective}}$)', fontsize=9)
     ax.grid(True, alpha=0.2)

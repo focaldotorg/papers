@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 T_MAX=720
-T_PERIOD=721
+T_PERIOD=980
 
 COLORS = {'Singleton': 'b', 'Sequential': '#2ca02c', 'Splitting': 'r', 'Dynamic': 'orange'}
 STRATEGIES = {
@@ -100,6 +100,7 @@ for name, powers in results.items():
 
 ax.axvline(x=180, color='grey', linestyle='--', alpha=0.4)
 ax.axvline(x=365, color='grey', linestyle='--', alpha=0.4)
+ax.axvline(x=720, color='grey', linestyle='--', alpha=0.4)
 
 ax.text(180, ax.get_ylim()[1], 'T1 (180d)', 
         color='black', alpha=1, fontsize=9,
@@ -107,6 +108,10 @@ ax.text(180, ax.get_ylim()[1], 'T1 (180d)',
 ax.text(365, ax.get_ylim()[1], 'T2 (365d)', 
         color='black', alpha=1, fontsize=9,
         ha='center', va='bottom')
+ax.text(720, ax.get_ylim()[1], '$t_{max}$ (720d)',
+        color='black', alpha=1, fontsize=9,
+        ha='center', va='bottom')
+
 
 ax.set_xlabel('Time (days)', fontsize=12)
 ax.set_ylabel('Voting Power ($V_P$)', fontsize=12)

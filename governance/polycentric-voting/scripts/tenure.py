@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 T_MAX=720
-T_PERIOD=800
+T_PERIOD=1600
 
 SMALL_SINGLETON_EVENTS = [(0, 100)]
 MAJOR_DYNAMIC_EVENTS = [ (0,   2000), (180, -1000), (365,  2000), (540, -1000) ]
@@ -68,6 +68,7 @@ for strategy, tau in tau_results.items():
 
 ax.axvline(x=180, color='grey', linestyle='--', alpha=0.4)
 ax.axvline(x=365, color='grey', linestyle='--', alpha=0.4)
+ax.axvline(x=720, color='grey', linestyle='--', alpha=0.4)
 
 ax.text(180, ax.get_ylim()[1], 'T1 (180d)', 
         color='black', alpha=1, fontsize=9,
@@ -75,7 +76,9 @@ ax.text(180, ax.get_ylim()[1], 'T1 (180d)',
 ax.text(365, ax.get_ylim()[1], 'T2 (365d)', 
         color='black', alpha=1, fontsize=9,
         ha='center', va='bottom')
-
+ax.text(720, ax.get_ylim()[1], '$t_{max}$ (720d)',
+        color='black', alpha=1, fontsize=9,
+        ha='center', va='bottom')
 
 for event_day, delta in MAJOR_DYNAMIC_EVENTS[1:]:
     ax.axvline(x=event_day, color='#ff7f0e', linestyle=':', alpha=0.7)
