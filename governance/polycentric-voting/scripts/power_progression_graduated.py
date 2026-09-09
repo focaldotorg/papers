@@ -5,13 +5,13 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes, mark_inset
 from math import sqrt, log2
 
-TMAX        = 1825
-BUFFER_DAYS = 520 
-TEAM_TOKENS = 10_000
-MAX_DAYS    = 2500
+T_MAX = 1825
+BUFFER_DAYS = 260 
+TEAM_TOKENS = 10000
+T_PERIOD = 2000 
 
 CAT_TOKENS = {'Major': 2000, 'Large': 1000, 'Median': 500, 'Minor': 200, 'Small': 100}
-CAT_COLORS = {'Major': '#EF5350', 'Large': '#FF8A65', 'Median': '#66BB6A', 'Minor': '#42A5F5', 'Small': '#1565C0', 'Team': '#7E57C2' }
+CAT_COLORS = {'Major': '#EF5350', 'Large': '#FF8A65', 'Median': '#66BB6A', 'Minor': '#42A5F5', 'Small': '#1565C0', 'Insiders': '#7E57C2' }
 SCHEDULE = {
     0:  {'Major': 1, 'Large': 2,  'Median': 3,  'Minor': 6,  'Small': 8},
     20: {'Major': 2, 'Large': 4,  'Median': 7,  'Minor': 14, 'Small': 24},
@@ -45,13 +45,11 @@ class PVAnalyzer:
             prev_limit = limit
             if remaining_time <= 0:
                 break
-        if weight > self.tmax:
-            return self.tmax
         return weight
 
     def calculate_power_ratio(self, t_effective):
         progress = np.clip(t_effective / self.tmax, self.rmin, self.rmax)
-        k = 0.1
+        k = 0.5
         return self.rmin + (self.rmax - self.rmin) * (progress ** k)
 
     def calculate_voting_power(self, tokens, t_effective):
@@ -78,7 +76,7 @@ def build_stakeholders():
             prev_counts[cat] = count
     # Team: single actor joining at day 0 with pre-committed teffective buffer
     all_stakeholders.append({
-        'category': 'Team',
+        'category': 'Insiders',
         'join_day': 0,
         'tokens': TEAM_TOKENS,
         'buffer': BUFFER_DAYS,
@@ -88,7 +86,7 @@ def build_stakeholders():
 
 def run_simulation(analyzer, max_days):
     all_stakeholders = build_stakeholders()
-    all_cats = list(CAT_TOKENS.keys()) + ['Team']
+    all_cats = list(CAT_TOKENS.keys()) + ['Insiders']
     days = range(0, max_days + 1, 5)
     results = []
     for day in days:
@@ -108,7 +106,7 @@ def run_simulation(analyzer, max_days):
 def plot_simulation(df, tranche_markers, filename=None):
     fig, ax = plt.subplots(figsize=(12, 7))
 
-    all_cats = list(CAT_TOKENS.keys()) + ['Team']
+    all_cats = list(CAT_TOKENS.keys()) + ['Insiders']
     cat_lines = {}
     for cat in all_cats:
         line, = ax.plot(
@@ -140,26 +138,26 @@ def plot_simulation(df, tranche_markers, filename=None):
 if __name__ == "__main__":
 
     graduated_tranches = [
-        {"max_days": 260,          "P": 0.05},
-        {"max_days": 520,          "P": 0.15},
-        {"max_days": 780,          "P": 0.30},
-        {"max_days": 1040,         "P": 0.50},
-        {"max_days": 1300,         "P": 0.70},
-        {"max_days": 1560,         "P": 0.85},
-        {"max_days": float('inf'), "P": 1.0}
+        {"max_days": 260,          "P": 0.010},
+        {"max_days": 520,          "P": 0.020},
+        {"max_days": 780,          "P": 0.025},
+        {"max_days": 1040,         "P": 0.030},
+        {"max_days": 1300,         "P": 0.045},
+        {"max_days": 1560,         "P": 0.050},
+        {"max_days": float('inf'), "P": 0.070}
     ]
-    graduated_analyzer = PVAnalyzer(tmax=TMAX, time_tranches=graduated_tranches)
-    graduated_df = run_simulation(graduated_analyzer, max_days=MAX_DAYS)
+    graduated_analyzer = PVAnalyzer(tmax=T_MAX, time_tranches=graduated_tranches)
+    graduated_df = run_simulation(graduated_analyzer, max_days=T_PERIOD)
     plot_simulation(
         graduated_df,
         tranche_markers=[
-            (260,  'T1 (260d)'),
-            (520,  'T2 (520d)'),
-            (780,  'T3 (780d)'),
-            (1040, 'T4 (1040d)'),
-            (1300, 'T5 (1300d)'),
-            (1560, 'T6 (1560d)'),
-            (TMAX, f'$t_{{max}}$ ({TMAX}d)'),
+            (260,  '$T_1$ (260d)'),
+            (520,  '$T_2$ (520d)'),
+            (780,  '$T_3$ (780d)'),
+            (1040, '$T_4$ (1040d)'),
+            (1300, '$T_5$ (1300d)'),
+            (1560, '$T_6$ (1560d)'),
+            (T_MAX, f'$t_{{max}}$ ({T_MAX}d)'),
         ],
         filename='power_progression_graduated.png'
     )

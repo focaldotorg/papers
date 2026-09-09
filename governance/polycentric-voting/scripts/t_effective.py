@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 T_MAX = 720
-T_PERIOD = 900
+T_PERIOD = 1000 
 
 SINGLETON_EVENTS  = [(0, 10000)]
 SEQUENTIAL_EVENTS = [(0, 3333), (90, 1667), (180, 2500), (270, 2500)]
@@ -10,9 +10,9 @@ DYNAMIC_EVENTS    = [(0, 5000), (180, -2500), (365, 5000), (540, -2500)]
 
 TRANCHE_MARKERS = [(180, 'T$_1$ (180d)'), (365, 'T$_2$ (365d)'), (720, '$t_{max}$ (720d)') ]
 STRATEGIES = {
-    'Singleton':  (SINGLETON_EVENTS,  'b'),
-    'Sequential': (SEQUENTIAL_EVENTS, '#2ca02c'),
-    'Dynamic':    (DYNAMIC_EVENTS,    '#ff7f0e'),
+    'Singleton':  (SINGLETON_EVENTS,  '#289128'),
+    'Sequential': (SEQUENTIAL_EVENTS, 'b'),
+    'Dynamic':    (DYNAMIC_EVENTS,    'orange'),
 }
 
 def calculate_effective_time(events, day):

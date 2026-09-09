@@ -2,15 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 T_MAX=720
-T_PERIOD=1600
+T_PERIOD=800
 
 SMALL_SINGLETON_EVENTS = [(0, 100)]
 MAJOR_DYNAMIC_EVENTS = [ (0,   2000), (180, -1000), (365,  2000), (540, -1000) ]
+SEQUENTIAL_EVENTS = [(0, 50), (180, 10), (230, 10), (230, 10), (300, 10), (360, 10)]
 
-COLORS = {'Dynamic': '#ff7f0e', 'Singleton': 'b', }
+COLORS = {'Singleton': '#289128', 'Sequential': 'b', 'Dynamic': 'orange'}
 STRATEGIES = {
-    'Dynamic':   MAJOR_DYNAMIC_EVENTS,
     'Singleton': SMALL_SINGLETON_EVENTS,
+    'Sequential': SEQUENTIAL_EVENTS,
+    'Dynamic':   MAJOR_DYNAMIC_EVENTS,
 }
 
 def calculate_effective_time(events, day):
@@ -70,10 +72,10 @@ ax.axvline(x=180, color='grey', linestyle='--', alpha=0.4)
 ax.axvline(x=365, color='grey', linestyle='--', alpha=0.4)
 ax.axvline(x=720, color='grey', linestyle='--', alpha=0.4)
 
-ax.text(180, ax.get_ylim()[1], 'T1 (180d)', 
+ax.text(180, ax.get_ylim()[1], '$T_1$ (180d)', 
         color='black', alpha=1, fontsize=9,
         ha='center', va='bottom')
-ax.text(365, ax.get_ylim()[1], 'T2 (365d)', 
+ax.text(365, ax.get_ylim()[1], '$T_2$ (365d)', 
         color='black', alpha=1, fontsize=9,
         ha='center', va='bottom')
 ax.text(720, ax.get_ylim()[1], '$t_{max}$ (720d)',

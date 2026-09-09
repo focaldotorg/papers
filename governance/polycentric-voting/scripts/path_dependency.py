@@ -15,9 +15,9 @@ STRATEGIES = {
 }
 
 COLORS = {
-    'Singleton':  'b',
-    'Sequential': '#2ca02c',
-    'Dynamic':    '#ff7f0e',
+    'Singleton':  '#289128',
+    'Sequential': 'b',
+    'Dynamic':    'orange',
 }
 
 def calculate_effective_time(events, day):

@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes, mark_inset
 from math import sqrt, log2
 
+T_MAX = 720
+T_PERIOD = 1000 
 CAT_TOKENS = {'Major': 2000, 'Large': 1000, 'Median': 500, 'Minor': 200, 'Small': 100}
 CAT_COLORS = {'Major': '#EF5350', 'Large': '#FF8A65', 'Median': '#66BB6A', 'Minor': '#42A5F5', 'Small': '#1565C0'}
 SCHEDULE = {
@@ -40,13 +42,11 @@ class PVAnalyzer:
             prev_limit = limit
             if remaining_time <= 0:
                 break
-        if weight > self.tmax:
-            return self.tmax
         return weight
 
     def calculate_power_ratio(self, t_effective):
         progress = np.clip(t_effective / self.tmax, self.rmin, self.rmax)
-        k = 0.1
+        k = 0.5
         return self.rmin + (self.rmax - self.rmin) * (progress ** k)
 
     def calculate_voting_power(self, tokens, t_effective):
@@ -55,7 +55,6 @@ class PVAnalyzer:
         W = self.calculate_time_weight(t_effective)
         alpha = self.calculate_power_ratio(t_effective)
         return W * (alpha * tokens + np.sqrt(tokens) * (1 - alpha))
-
 
 def build_stakeholders():
     all_stakeholders = []
@@ -149,15 +148,15 @@ def plot_simulation(df, tranche_markers, zoom_window=None, inset_pos=None, filen
 if __name__ == "__main__":
 
     agile_tranches = [
-        {"max_days": 180,          "P": 0.2},
-        {"max_days": 365,          "P": 0.8},
-        {"max_days": float('inf'), "P": 1.0}
+        {"max_days": 180,          "P": 0.020},
+        {"max_days": 365,          "P": 0.035},
+        {"max_days": float('inf'), "P": 0.070}
     ]
-    agile_analyzer = PVAnalyzer(tmax=720, time_tranches=agile_tranches)
-    agile_df = run_simulation(agile_analyzer, max_days=720)
+    agile_analyzer = PVAnalyzer(tmax=T_MAX, time_tranches=agile_tranches)
+    agile_df = run_simulation(agile_analyzer, max_days=T_PERIOD)
     plot_simulation(
         agile_df,
-        tranche_markers=[(180, 'T1 (180d)'), (365, 'T2 (365d)')],
+        tranche_markers=[(180, '$T_1$ (180d)'), (365, '$T_2$ (365d)'), (720, '$t_{max}$ (720d)' )],
         zoom_window=(10, 90),
         filename='power_progression_agile.png'
     )

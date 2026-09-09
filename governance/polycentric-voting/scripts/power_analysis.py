@@ -10,9 +10,9 @@ RMAX  = 1.0
 SCALE = 100
 
 AGILE_TRANCHES = [
-    {"max_days": 180,          "P": 0.2},
-    {"max_days": 365,          "P": 0.8},
-    {"max_days": float('inf'), "P": 1.0},
+    {"max_days": 180,          "P": 0.020},
+    {"max_days": 365,          "P": 0.035},
+    {"max_days": float('inf'), "P": 0.070},
 ]
 
 CAT_TOKENS = {'Major': 2000, 'Large': 1000, 'Median': 500, 'Minor': 200, 'Small': 100}
@@ -64,18 +64,19 @@ def calculate_time_weight(t_effective):
         prev       = limit
         if remaining <= 0:
             break
-    return min(weight, T_MAX)
+    return weight
 
 def calculate_power_ratio(t_effective):
     progress = np.clip(t_effective / T_MAX, RMIN, 1)
-    return RMIN + (RMAX - RMIN) * (progress ** 0.1)
+    return RMIN + (RMAX - RMIN) * (progress ** 0.5)
 
 def calculate_voting_power(tokens, t_effective):
     if t_effective <= 0:
         return 0.0
     W     = calculate_time_weight(t_effective)
     alpha = calculate_power_ratio(t_effective)
-    return W * (alpha * tokens + np.sqrt(tokens) * (1 - alpha))
+    # Include share weight
+    return tokens + W * (alpha * tokens + np.sqrt(tokens) * (1 - alpha))
 
 def build_stakeholders():
     all_s = []
@@ -100,14 +101,13 @@ def run_banzhaf_benchmark(max_days=720, step=5):
 
         pv_weights    = [max(1, int(calculate_voting_power(s['tokens'], day - s['join_day']) / SCALE)) for s in active]
         pluto_weights = [max(1, int(s['tokens'] / SCALE)) for s in active]
-
-        pv_quota    = ceil(sum(pv_weights)    * 0.33)
-        pluto_quota = ceil(sum(pluto_weights) * 0.33)
+        pv_quota    = ceil(sum(pv_weights)    * 0.51)
+        pluto_quota = ceil(sum(pluto_weights) * 0.51)
 
         total_pv    = sum(pv_weights)
         total_pluto = sum(pluto_weights)
         pv_norm     = [max(1, int(w * total_pluto / total_pv)) for w in pv_weights]
-        cross_quota = ceil(total_pluto * 0.33)
+        cross_quota = ceil(total_pluto * 0.51)
 
         pv_idx    = banzhaf(pv_weights,    pv_quota)
         pluto_idx = banzhaf(pluto_weights, pluto_quota)
@@ -141,11 +141,13 @@ def plot_banzhaf(df):
         ax1.plot(df['day'], df[f'pv_{cat}'], label=cat, color=color, linewidth=1.8)
     ax1.axvline(x=180, color='grey', linestyle='--', alpha=0.4)
     ax1.axvline(x=365, color='grey', linestyle='--', alpha=0.4)
+    ax1.axvline(x=720, color='grey', linestyle='--', alpha=0.4)
     ax1.text(180, ax1.get_ylim()[1], '$T_{1}$ (180d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax1.text(365, ax1.get_ylim()[1], '$T_{2}$ (365d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
+    ax1.text(720, ax1.get_ylim()[1], '$t_{max}$ (720d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax1.set_xlabel('Time (days)')
     ax1.set_ylabel('Banzhaf Index')
-    ax1.legend(fontsize=9)
+    ax1.legend(fontsize=9, loc='upper right')
     ax1.grid(True, alpha=0.2)
     plt.tight_layout()
     plt.savefig('banzhaf_pv.png', dpi=150, bbox_inches='tight')
@@ -156,11 +158,13 @@ def plot_banzhaf(df):
         ax2.plot(df['day'], df[f'pluto_{cat}'], label=cat, color=color, linewidth=1.8)
     ax2.axvline(x=180, color='grey', linestyle='--', alpha=0.4)
     ax2.axvline(x=365, color='grey', linestyle='--', alpha=0.4)
+    ax2.axvline(x=720, color='grey', linestyle='--', alpha=0.4)
     ax2.text(180, ax2.get_ylim()[1], '$T_{1}$ (180d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax2.text(365, ax2.get_ylim()[1], '$T_{2}$ (365d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
+    ax2.text(720, ax2.get_ylim()[1], '$t_{max}$ (720d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax2.set_xlabel('Time (days)')
     ax2.set_ylabel('Banzhaf Index')
-    ax2.legend(fontsize=9)
+    ax2.legend(fontsize=9, loc='upper right')
     ax2.grid(True, alpha=0.2)
     plt.tight_layout()
     plt.savefig('banzhaf_plutocracy.png', dpi=150, bbox_inches='tight')
@@ -171,11 +175,13 @@ def plot_banzhaf(df):
         ax3.plot(df['day'], df[f'cross_{cat}'], label=cat, color=color, linewidth=1.8)
     ax3.axvline(x=180, color='grey', linestyle='--', alpha=0.4)
     ax3.axvline(x=365, color='grey', linestyle='--', alpha=0.4)
+    ax3.axvline(x=720, color='grey', linestyle='--', alpha=0.4)
     ax3.text(180, ax3.get_ylim()[1], '$T_{1}$ (180d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax3.text(365, ax3.get_ylim()[1], '$T_{2}$ (365d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
+    ax3.text(720, ax3.get_ylim()[1], '$t_{max}$ (720d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax3.set_xlabel('Time (days)')
     ax3.set_ylabel('Banzhaf Index')
-    ax3.legend(fontsize=9)
+    ax3.legend(fontsize=9, loc='upper right')
     ax3.grid(True, alpha=0.2)
     plt.tight_layout()
     plt.savefig('banzhaf_cross.png', dpi=150, bbox_inches='tight')
@@ -213,11 +219,11 @@ def print_range_table(df):
     cross_all = df[[f'cross_{c}' for c in cats]].values.flatten()
 
     print(sep)
+    print(f"{'Std Dev':<8} {np.std(pv_all):>{col_w}.6f} {np.std(pluto_all):>{col_w}.6f} {np.std(cross_all):>{col_w}.6f}")
     print(f"{'Variance':<8} {np.var(pv_all):>{col_w}.6f} {np.var(pluto_all):>{col_w}.6f} {np.var(cross_all):>{col_w}.6f}")
 
-
 if __name__ == "__main__":
-    df = run_banzhaf_benchmark()
+    df = run_banzhaf_benchmark(800)
     plot_banzhaf(df)
     print("\nPower Concentration Range & Variance Table\n")
     print_range_table(df)
