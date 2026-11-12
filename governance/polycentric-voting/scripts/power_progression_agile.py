@@ -18,7 +18,7 @@ SCHEDULE = {
 }
 
 class PVAnalyzer:
-    def __init__(self, rmin=0.2, rmax=1.0, tmax=720, time_tranches=None):
+    def __init__(self, rmin=0.2, rmax=1, tmax=720, time_tranches=None):
         self.rmin = rmin
         self.rmax = rmax
         self.tmax = tmax
@@ -34,7 +34,10 @@ class PVAnalyzer:
         prev_limit = 0
         for tranche in self.time_tranches:
             limit = tranche['max_days']
-            width = limit - prev_limit if limit != float('inf') else remaining_time
+            if limit != float('inf'):
+                width = limit - prev_limit
+            else:
+                width = remaining_time   
             time_in_bracket = min(remaining_time, width)
             if time_in_bracket > 0:
                 weight += np.log2(time_in_bracket + 1) * tranche['P']
@@ -71,10 +74,9 @@ def build_stakeholders():
             prev_counts[cat] = count
     return all_stakeholders
 
-
 def run_simulation(analyzer, max_days):
     all_stakeholders = build_stakeholders()
-    days = range(0, max_days + 1, 5)
+    days = range(0, max_days + 1, 1)
     results = []
     for day in days:
         day_results = {'day': day}
@@ -88,7 +90,6 @@ def run_simulation(analyzer, max_days):
             day_results[f'{cat}_Vp'] = total_vp
         results.append(day_results)
     return pd.DataFrame(results)
-
 
 def plot_simulation(df, tranche_markers, zoom_window=None, inset_pos=None, filename=None):
     fig, ax = plt.subplots(figsize=(12, 7))
@@ -144,9 +145,7 @@ def plot_simulation(df, tranche_markers, zoom_window=None, inset_pos=None, filen
     plt.savefig(fname, dpi=150, bbox_inches='tight')
     plt.show()
 
-
 if __name__ == "__main__":
-
     agile_tranches = [
         {"max_days": 180,          "P": 0.020},
         {"max_days": 365,          "P": 0.035},
@@ -157,6 +156,6 @@ if __name__ == "__main__":
     plot_simulation(
         agile_df,
         tranche_markers=[(180, '$T_1$ (180d)'), (365, '$T_2$ (365d)'), (720, '$t_{max}$ (720d)' )],
-        zoom_window=(10, 90),
+        zoom_window=(175, 275),
         filename='power_progression_agile.png'
     )

@@ -18,17 +18,11 @@ plt.rcParams.update({
     'grid.color':          AXIS_COLOR,
 })
 
+T1 = 180
+T2 = 365
 T_MAX = 720
-T1    = 180
-T2    = 365
 
-COLORS = {
-    'Singleton':  '#289128',
-    'Sequential': 'b',
-    'Splitting':  'r',
-    'Dynamic':    'orange',
-}
-
+COLORS = {'Singleton':  '#4477CC', 'Sequential': '#2ca02c', 'Splitting': '#CC4444', 'Dynamic': '#E07800' }
 STRATEGIES = {
     'Singleton':  [(0, +10000, '+10,000')],
     'Sequential': [(0, +3333, '+3,333'), (90, +1667, '+1,667'),
@@ -51,7 +45,6 @@ for name in strategy_order:
     ytop = 1.0
     mid  = (ybot + ytop) / 2
 
-    # Centre line using axes-fraction y
     ax.hlines(
         y=mid,
         xmin=0,
@@ -62,13 +55,11 @@ for name in strategy_order:
         alpha=0.85
     )
 
-    # T1 / T2 vertical dashed lines with labels on all plots
     for xv, lbl in [(T1, '$T_1$'), (T2, '$T_2$')]:
         ax.axvline(xv, color=AXIS_COLOR, linestyle=':', linewidth=0.9, alpha=0.5)
         ax.text(xv, 1.15, lbl, transform=ax.get_xaxis_transform(),
                 color=AXIS_COLOR, fontsize=8, ha='center', va='top', alpha=0.7)
 
-    # Arrows and labels
     arrow_up_tip   = mid + 0.35
     arrow_down_tip = mid - 0.35
 
@@ -104,7 +95,5 @@ for name in strategy_order:
         spine.set_edgecolor(AXIS_COLOR)
         spine.set_linewidth(0.8)
 
-    out = f'./pv_strategy_{name.lower()}_light.png'
-    plt.savefig(out, format='png', dpi=150, bbox_inches='tight')
-    print(f"Saved {out}")
+    plt.savefig(f'./pv_strategy_{name.lower()}_light.png', format='png', dpi=150, bbox_inches='tight')
     plt.close(fig)

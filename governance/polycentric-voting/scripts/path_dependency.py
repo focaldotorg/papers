@@ -2,23 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 T_MAX = 720
-T_PERIOD = 1600
+T_PERIOD = 2000
 
 SINGLETON_EVENTS  = [(0, 10000)]
 SEQUENTIAL_EVENTS = [(0, 3333), (90, 1667), (180, 2500), (270, 2500)]
 DYNAMIC_EVENTS    = [(0, 5000), (180, -2500), (365, 5000), (540, -2500)]
-
-STRATEGIES = {
-    'Singleton':  SINGLETON_EVENTS,
-    'Sequential': SEQUENTIAL_EVENTS,
-    'Dynamic':    DYNAMIC_EVENTS,
-}
-
-COLORS = {
-    'Singleton':  '#289128',
-    'Sequential': 'b',
-    'Dynamic':    'orange',
-}
+COLORS = {'Singleton':  '#4477CC', 'Sequential': '#2ca02c', 'Dynamic': '#E07800' }
+STRATEGIES = { 'Singleton':  SINGLETON_EVENTS, 'Sequential': SEQUENTIAL_EVENTS, 'Dynamic': DYNAMIC_EVENTS }
 
 def calculate_effective_time(events, day):
     current_shares = 0
@@ -28,13 +18,10 @@ def calculate_effective_time(events, day):
         if event_day > day:
             break
         elapsed = day - event_day
-        if delta > 0:
-            if current_shares + delta == 0:
-                current_t_eff = 0
-            else:
-                numerator     = (current_shares * current_t_eff) + (delta * elapsed)
-                denominator   = current_shares + delta
-                current_t_eff = numerator / denominator
+        if delta > 0: 
+            numerator     = (current_shares * current_t_eff) + (delta * elapsed)
+            denominator   = current_shares + delta
+            current_t_eff = numerator / denominator
             current_shares += delta
         elif delta < 0:
             withdraw = min(abs(delta), current_shares)
@@ -45,7 +32,7 @@ def calculate_effective_time(events, day):
 
     return current_t_eff
 
-days_range = np.arange(0, T_PERIOD, 1)
+days_range = np.arange(0, T_PERIOD + 1, 1)
 
 t_eff_results = {}
 for strategy, events in STRATEGIES.items():
@@ -89,7 +76,6 @@ print("-" * 75)
 for strategy, rho in rho_results.items():
     tau_vals = []
     for d in checkpoints:
-        # slope of rho up to day d via linear regression
         x = np.arange(d + 1, dtype=float)
         y = np.array(rho[:d + 1])
         slope = np.polyfit(x, y, 1)[0]

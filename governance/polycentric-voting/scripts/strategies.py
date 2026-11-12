@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 T_MAX=720
 T_PERIOD=980
 
-COLORS = {'Splitting': 'r', 'Singleton': '#289128', 'Sequential': 'b', 'Dynamic': 'orange'}
+COLORS = {'Singleton':  '#4477CC', 'Sequential': '#2ca02c', 'Splitting': '#CC4444', 'Dynamic': '#E07800' }
 STRATEGIES = {
-    'Splitting':  [(0, 100)],   # 100x accounts of 100
+    'Splitting':  [(0, 100)], # 100x accounts of 100
     'Singleton':  [(0, 10000)],
     'Sequential': [(0, 3333), (90, 1667), (180, 2500), (270, 2500)],
     'Dynamic':    [(0, 7000), (180, -2000), (365, +6000), (540, -1000)],
@@ -35,18 +35,15 @@ def calculate_effective_time(events, days):
 
     return current_t_eff, current_shares
 
-
 def calculate_convergence_day(events, t_max=T_MAX, horizon_days=20000, day_step=1):
     deposit_days = [day for day, delta in events if delta > 0]
     if not deposit_days:
-        return None  # never accumulates any time-weight
+        return None  
 
     last_deposit_day = max(deposit_days)
     t_eff_at_last_deposit, _ = calculate_effective_time(events, last_deposit_day)
 
     if t_eff_at_last_deposit < t_max:
-        # Closed-form: t_eff grows at slope 1 with no more discontinuities
-        # after the last deposit, so solve directly.
         return last_deposit_day + (t_max - t_eff_at_last_deposit)
 
     last_below = None
@@ -58,7 +55,6 @@ def calculate_convergence_day(events, t_max=T_MAX, horizon_days=20000, day_step=
         day += day_step
     return None if last_below is None else last_below + day_step
 
-
 def calculate_time_weight(t_effective):
     time_tranches = [
         {"max_days": 180,          "P": 0.020},
@@ -66,20 +62,23 @@ def calculate_time_weight(t_effective):
         {"max_days": float('inf'), "P": 0.070}
     ]
     weight = 0
-    remaining_time = t_effective
+    width = 0
+    remainder_time = t_effective 
     prev_limit = 0
     for tranche in time_tranches:
         limit = tranche['max_days']
-        width = limit - prev_limit if limit != float('inf') else remaining_time
-        time_in_bracket = min(remaining_time, width)
+        if limit != float('inf'):
+            width = limit - prev_limit
+        else:
+            width = remainder_time    
+        time_in_bracket = min(remainder_time, width)
         if time_in_bracket > 0:
             weight += np.log2(time_in_bracket + 1) * tranche['P']
-        remaining_time -= time_in_bracket
+        remainder_time -= time_in_bracket
         prev_limit = limit
-        if remaining_time <= 0:
+        if remainder_time <= 0:
             break
     return weight
-
 
 def calculate_power_ratio(t_effective, t_max=720, r_max=1.0, r_min=0.2, k_c=0.5):
     progress = np.clip(t_effective / t_max, r_min, 1)
@@ -90,26 +89,20 @@ def calculate_voting_power(total_tokens, time_weight, alpha):
         return 0
     return time_weight * (alpha * total_tokens + np.sqrt(total_tokens) * (1 - alpha))
 
-
 def simulate_strategy(name, events, days_range):
     voting_powers = []
     for days in days_range:
         t_eff, tokens = calculate_effective_time(events, days)
-
+        W = calculate_time_weight(t_eff)
+        alpha = calculate_power_ratio(t_eff)
         if name == 'Splitting':
             tokens = 100 
-            W     = calculate_time_weight(t_eff)
-            alpha = calculate_power_ratio(t_eff)
-            voting_powers.append(calculate_voting_power(100, W, alpha) * 100)
-            continue
-
-        W     = calculate_time_weight(t_eff)
-        alpha = calculate_power_ratio(t_eff)
-        voting_powers.append(calculate_voting_power(tokens, W, alpha))
+            voting_powers.append(calculate_voting_power(tokens, W, alpha) * 100)
+        else: 
+            voting_powers.append(calculate_voting_power(tokens, W, alpha))
     return voting_powers
 
-
-days_range = np.arange(0, T_PERIOD, 20)
+days_range = np.arange(0, T_PERIOD + 1, 1)
 
 results = {name: simulate_strategy(name, events, days_range)
            for name, events in STRATEGIES.items()}

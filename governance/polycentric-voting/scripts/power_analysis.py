@@ -8,7 +8,6 @@ T_MAX = 720
 RMIN  = 0.2
 RMAX  = 1.0
 SCALE = 100
-
 AGILE_TRANCHES = [
     {"max_days": 180,          "P": 0.020},
     {"max_days": 365,          "P": 0.035},
@@ -49,14 +48,16 @@ def banzhaf(weight, quota):
     total_power = sum(banzhaf_power)
     return [float(p) / total_power if total_power > 0 else 0.0 for p in banzhaf_power]
 
-
 def calculate_time_weight(t_effective):
     weight    = 0
     remaining = t_effective
     prev      = 0
     for tranche in AGILE_TRANCHES:
-        limit      = tranche['max_days']
-        width      = limit - prev if limit != float('inf') else remaining
+        limit = tranche['max_days']
+        if limit != float('inf'):
+            width = limit - prev  
+        else: 
+            width = remaining
         in_bracket = min(remaining, width)
         if in_bracket > 0:
             weight += np.log2(in_bracket + 1) * tranche['P']
@@ -88,8 +89,7 @@ def build_stakeholders():
             prev[cat] = count
     return all_s
 
-
-def run_banzhaf_benchmark(max_days=720, step=5):
+def run_banzhaf_benchmark(max_days=720, step=1):
     stakeholders = build_stakeholders()
     cats         = list(CAT_TOKENS.keys())
     records      = []
@@ -131,7 +131,6 @@ def run_banzhaf_benchmark(max_days=720, step=5):
 
     return pd.DataFrame(records)
 
-
 def plot_banzhaf(df):
     cats   = list(CAT_TOKENS.keys())
     colors = CAT_COLORS
@@ -146,7 +145,7 @@ def plot_banzhaf(df):
     ax1.text(365, ax1.get_ylim()[1], '$T_{2}$ (365d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax1.text(720, ax1.get_ylim()[1], '$t_{max}$ (720d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax1.set_xlabel('Time (days)')
-    ax1.set_ylabel('Banzhaf Index')
+    ax1.set_ylabel('Banzhaf Index ($B_i$)')
     ax1.legend(fontsize=9, loc='upper right')
     ax1.grid(True, alpha=0.2)
     plt.tight_layout()
@@ -163,7 +162,7 @@ def plot_banzhaf(df):
     ax2.text(365, ax2.get_ylim()[1], '$T_{2}$ (365d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax2.text(720, ax2.get_ylim()[1], '$t_{max}$ (720d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax2.set_xlabel('Time (days)')
-    ax2.set_ylabel('Banzhaf Index')
+    ax2.set_ylabel('Banzhaf Index ($B_i$)')
     ax2.legend(fontsize=9, loc='upper right')
     ax2.grid(True, alpha=0.2)
     plt.tight_layout()
@@ -180,17 +179,16 @@ def plot_banzhaf(df):
     ax3.text(365, ax3.get_ylim()[1], '$T_{2}$ (365d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax3.text(720, ax3.get_ylim()[1], '$t_{max}$ (720d)', color='black', alpha=1, fontsize=9, ha='center', va='bottom')
     ax3.set_xlabel('Time (days)')
-    ax3.set_ylabel('Banzhaf Index')
+    ax3.set_ylabel('Banzhaf Index ($B_i$)')
     ax3.legend(fontsize=9, loc='upper right')
     ax3.grid(True, alpha=0.2)
     plt.tight_layout()
     plt.savefig('banzhaf_cross.png', dpi=150, bbox_inches='tight')
     plt.show()
 
-
 def print_range_table(df):
     cats      = list(CAT_TOKENS.keys())
-    snapshots = [90, 180, 270, 365, 450, 540, 630, 720]
+    snapshots = [90, 180, 270, 360, 450, 540, 630, 800]
 
     col_w = 14
     header = f"{'Day':<8} {'Pluto Range':>{col_w}} {'PV Range':>{col_w}} {'Cross Range':>{col_w}}"
@@ -213,17 +211,19 @@ def print_range_table(df):
 
         print(f"{int(row['day'].values[0]):<8} {pluto_r:>{col_w}.4f} {pv_r:>{col_w}.4f} {cross_r:>{col_w}.4f}")
 
-    # Variance of raw Banzhaf indices across full time series per system
-    pv_all    = df[[f'pv_{c}'    for c in cats]].values.flatten()
-    pluto_all = df[[f'pluto_{c}' for c in cats]].values.flatten()
-    cross_all = df[[f'cross_{c}' for c in cats]].values.flatten()
+    # Exclude onboarding period 
+    df_finalised = df.iloc[80:]
+
+    # Per-category variance
+    pv_var    = sum(np.var(df_finalised[f'pv_{c}'].values)    for c in cats)
+    pluto_var = sum(np.var(df_finalised[f'pluto_{c}'].values) for c in cats)
+    cross_var = sum(np.var(df_finalised[f'cross_{c}'].values) for c in cats)
 
     print(sep)
-    print(f"{'Std Dev':<8} {np.std(pv_all):>{col_w}.6f} {np.std(pluto_all):>{col_w}.6f} {np.std(cross_all):>{col_w}.6f}")
-    print(f"{'Variance':<8} {np.var(pv_all):>{col_w}.6f} {np.var(pluto_all):>{col_w}.6f} {np.var(cross_all):>{col_w}.6f}")
+    print(f"{'Variance':<8} {pluto_var:>{col_w}.6f} {pv_var:>{col_w}.6f} {cross_var:>{col_w}.6f}")
 
 if __name__ == "__main__":
     df = run_banzhaf_benchmark(800)
     plot_banzhaf(df)
-    print("\nPower Concentration Range & Variance Table\n")
+    print("\nPower Range & Variance Table\n")
     print_range_table(df)

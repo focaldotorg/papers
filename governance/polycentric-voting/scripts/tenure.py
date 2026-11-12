@@ -2,13 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 T_MAX=720
-T_PERIOD=800
+T_PERIOD=2000
 
 SMALL_SINGLETON_EVENTS = [(0, 100)]
 MAJOR_DYNAMIC_EVENTS = [ (0,   2000), (180, -1000), (365,  2000), (540, -1000) ]
 SEQUENTIAL_EVENTS = [(0, 50), (180, 10), (230, 10), (230, 10), (300, 10), (360, 10)]
-
-COLORS = {'Singleton': '#289128', 'Sequential': 'b', 'Dynamic': 'orange'}
+COLORS = {'Singleton':  '#4477CC', 'Sequential': '#2ca02c', 'Dynamic': '#E07800' }
 STRATEGIES = {
     'Singleton': SMALL_SINGLETON_EVENTS,
     'Sequential': SEQUENTIAL_EVENTS,
@@ -22,13 +21,10 @@ def calculate_effective_time(events, day):
         if event_day > day:
             break
         elapsed = day - event_day
-        if delta > 0:
-            if current_shares + delta == 0:
-                current_t_eff = 0
-            else:
-                numerator     = (current_shares * current_t_eff) + (delta * elapsed)
-                denominator   = current_shares + delta
-                current_t_eff = numerator / denominator
+        if delta > 0: 
+            numerator     = (current_shares * current_t_eff) + (delta * elapsed)
+            denominator   = current_shares + delta
+            current_t_eff = numerator / denominator
             current_shares += delta
         elif delta < 0:
             withdraw = min(abs(delta), current_shares)
@@ -39,7 +35,7 @@ def calculate_effective_time(events, day):
 
     return current_t_eff
 
-days_range = np.arange(0, T_PERIOD, 1)
+days_range = np.arange(0, T_PERIOD + 1, 1)
 
 t_eff_results = {}
 for strategy, events in STRATEGIES.items():
@@ -61,7 +57,6 @@ for strategy, rho in rho_results.items():
             slope = np.polyfit(x, y, 1)[0]
             tau_series.append(slope)
     tau_results[strategy] = tau_series
-
 
 fig, ax = plt.subplots(figsize=(11, 6))
 

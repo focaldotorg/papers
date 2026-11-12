@@ -37,7 +37,10 @@ class PVAnalyzer:
         prev_limit = 0
         for tranche in self.time_tranches:
             limit = tranche['max_days']
-            width = limit - prev_limit if limit != float('inf') else remaining_time
+            if limit != float('inf'):
+                width = limit - prev_limit
+            else:
+                width = remaining_time   
             time_in_bracket = min(remaining_time, width)
             if time_in_bracket > 0:
                 weight += np.log2(time_in_bracket + 1) * tranche['P']
@@ -74,7 +77,7 @@ def build_stakeholders():
                     'buffer': 0,
                 })
             prev_counts[cat] = count
-    # Team: single actor joining at day 0 with pre-committed teffective buffer
+    # Insiders constituency  
     all_stakeholders.append({
         'category': 'Insiders',
         'join_day': 0,
@@ -134,9 +137,7 @@ def plot_simulation(df, tranche_markers, filename=None):
     plt.savefig(fname, dpi=150, bbox_inches='tight')
     plt.show()
 
-
 if __name__ == "__main__":
-
     graduated_tranches = [
         {"max_days": 260,          "P": 0.010},
         {"max_days": 520,          "P": 0.020},
