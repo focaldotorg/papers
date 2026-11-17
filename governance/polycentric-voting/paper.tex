@@ -1,3 +1,4 @@
+% !TEX program = xelatex
 \documentclass[a4paper,12pt]{article}
 
 % Essential packages
@@ -12,21 +13,43 @@
 \usepackage{xcolor} % For colors
 \usepackage{tikz} % For diagrams
 \usepackage{multirow}
-\usepackage{booktabs}
 \usepackage{tabularx}
-\usepackage{caption}
- \usepackage[parfill]{parskip}
+\usepackage[parfill]{parskip}
 \usepackage[semibold]{sourcesanspro}
-\usepackage{eso-pic}
-\usepackage[none]{hyphenat}
 \usepackage{mdframed}
 \usepackage{microtype}
 \usepackage{multicol}
 \usepackage[table]{xcolor}
 \usepackage{float}
+\usepackage{eso-pic}
+\usepackage{fontspec}
+\usepackage{setspace} % Required in preamble if using \setstretch
+\usepackage{enumitem}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+
+\setlength{\parindent}{2em}
+\newfontfamily{\signifier}{signifier-regular.ttf}[Path = fonts/]
+\newfontfamily{\tnr}[
+  Path = fonts/,
+  UprightFont = times-new-roman.ttf,
+  ItalicFont  = times-new-roman-italic.ttf,
+  BoldFont = times-new-roman-bold.ttf
+]{Times New Roman}
+\renewcommand{\refname}{\Large \signifier References}
+
+\AddToShipoutPictureFG*{%
+  \AtPageUpperLeft{%
+    \raisebox{-4.5em}{%
+      \makebox[\paperwidth][r]{%
+              \signifier{\small }\hspace{0.85in}%
+         }%
+    }%
+  }%
+}
 
 % Page settings
-\geometry{margin=0.8in}
+\geometry{margin=0.9in}
 \hypersetup{colorlinks=true, allcolors=black}
 
 % Hyperref settings
@@ -35,21 +58,28 @@
     linkcolor=blue,
     filecolor=magenta,
     urlcolor=cyan,
-    pdftitle={Polycentric Voting (PV)},
+    pdftitle={Polycentric Voting},
     pdfauthor={Samuel J. Gosling},
-    pdfsubject={Governance, Economics},
-    pdfkeywords={weighted voting, polycentrism, polycracy, plutocracy, governance, voting power}
+    pdfsubject={Voting Theory, Economics, Mechanism Design, Corporate Governance},
+    pdfkeywords={weighted voting, loyalty, time-weighting, shareholder governance, plutocracy, polycentric, polycentrism, polycracy}
 }
+
+% Hypernation settings
+\lefthyphenmin=3
+\righthyphenmin=3
+\hyphenpenalty=300
+\exhyphenpenalty=300
 
 \begin{document}
 \begin{center}
-{\huge \textbf{Polycentric Voting (PV)}} \\[2em]
-{\large \fontseries{sb}\selectfont Samuel J. Gosling} \\[.2em]
-{\large {samuel@focal.org}} \\[1em]
-{\large \today}
+{\huge \signifier{Polycentric Voting}} \\[2em]
+{\large \fontseries{sb}\selectfont Samuel J. Gosling} \\[.25em]
+{\large \itshape \tnr Focal Research Collective} \\[.25em]
+{\large \itshape \tnr samuel@focal.org} \\[1.5em]
+
 \end{center}
 
-\section*{Abstract}
+\section*{\signifier Abstract}
 
 \vspace{1em}
 \begin{mdframed}[
@@ -58,63 +88,66 @@
   topline=false,
   bottomline=false,
   rightline=false,
-  innerleftmargin=14pt,
+  innerleftmargin=10pt,
   innerrightmargin=1pt,
   innertopmargin=0pt,
   innerbottommargin=-0.5pt
 ]
-{\small\fontseries{sb}\selectfont A progressive voting model that composes stake, time and commitment as centres to defining authority, where traditionally votes are treated identically regardless of tenure. A path-dependent time weight captures the trajectory of commitment rather than a snapshot of individual holdings and normalising influence across graduated phases through discrete power tranches. This produces emergent demographic stratification that satisfies both Polanyi's structural definition of polycentrism and Ostrom's empirical conditions for effective collective governance.}
+{\small\fontseries{sb}\selectfont
+\setstretch{0.95} 
+\frenchspacing
+A progressive voting model that composes stake, time and commitment as centres to defining authority, where traditionally votes are treated identically regardless of tenure. A path dependent time weight captures the trajectory of commitment rather than a snapshot of individual holdings. Creating discrete power and dynamic order that satisfies Polanyi's definition of polycentrism and complements Ostrom's conditions for autonomous governance.\par}
 \end{mdframed}
 
-\section{Background}
-\begin{multicols}{2}
-\raggedright
-Authority in organisations is typically denominated by shares or tokens, one-share one-vote are plutocratic systems but undoubtedly enable decisive decision-making not by part of concentrating power among wealthy stakeholders, creates vulnerability to vote-buying and marginalising smaller participants. Ultimately eroding representation and increasing systemic exposure to short-sighted governance. \vspace{6pt}
+\section{\signifier Background}
+While one share, one vote systems can enable decisive decision-making for organisations they face issue in the concentration of power, vulnerability to vote-buying and the facilitation of empty voting. Eroding representation and increasing systemic exposure to short-sighted governance.  \textbf{Penrose (1946)} first proposed the square-root method as a means of dampening concentrations of power while preserving broad representation \cite{penrose1946}, laying the mathematical foundation for modern voting theory when addressing disenfranchisement.
 
-\textbf{Penrose (1946)} first proposed the square-root method as a means of dampening concentrations of power while preserving broad representation \cite{penrose1946}, laying the mathematical foundation for modern voting theory; how to address disenfranchisement across interdisciplinary and operational governance. The paper had little immediate preliminary effects to studies but overtime would come to be a focal point to weighted-voting. \newline
+\textbf{Polanyi (1951)} philosophised the thesis of polycentrism defined as cooperative systems with multiple centres of commonality or authority \cite{polanyi1951}. While plutocracy may appear to be polycentric by means of fractionalised ownership, in practicality it eventually collapses into a hierarchy. As power accrual faces no structural resistance given authority is composed from a single axis. \textbf{Ostrom (1990)} observed that effective commons governance requires institutional design and conforms to a polycentric structure \cite{ostrom1990}.
 
-\textbf{Polanyi (1951)} philosophised the thesis of polycentrism defined as cooperative bodies with multiple nodes or centres of authority, where no single actor maintains complete control \cite{polanyi1951}. Plutocracy presents the desire of a polycentric system through dispersed fractionalised ownership, yet, mechanically collapses into hierarchy as capital accumulation faces no structural resistance and authority reduces to a single axis. \newline \\  
+\section{\signifier Theory}
 
-\textbf{Ostrom (1990)} demonstrated that the design of governance institutions fundamentally determines the success of collective action - carefully crafted rules enable effective autonomous governance without requiring continuous external intervention \cite{ostrom1990}. The design challenge remains: how to equitably represent stake, time and commitment  without compromising a governing system's capacity to adapt and act.
+\subsection{\signifier Effective Time}
 
-\end{multicols}
-
-\vspace{-30pt}
-
-\section{Theory}
-
-\subsection{Effective Time}
-
-When quantifying time the optimal solution relies in progressively scaling the multiplier proportional to base average voting power, this is done to promote behaviour of either absolute or progressive power accumulation. Where $t_i$ is the delta time or "age" of the deposit and $a_i$ equates to an increment amount of shares held or deposited.
+To balance time and stake we propose a stake-time integral known as effective time, in which the total realised stake is proportional to the sum of associated deposit-time values. 
 
 \begin{equation}
-t_{\text{effective}} = \frac{\sum a_i \cdot t_i}{\sum a_i}    
+t_{\text{effective}} = \frac{\sum a_i \cdot t_i}{\sum a_i}  
 \end{equation}
 \vspace{0.5pt}
 
-In cases of rebalancing the time weight, we use the derivative notation to represent delta change, where $a_d$ represents the delta amount:
+Where $t_i$ is the age of or time since a deposit and $a_i$ equates to an increment amount of shares held or deposited. Where which the products of the numerator and denomination can be expressed as $a_{stake} = \sum a_i$ for the total realised stake and $s_t =  \sum a_i \cdot t_i$ as the stake-time accumulator.
+
+\newpage
+
+In the case of rebalancing, represented by derivative notation, $a_d$ representing the delta amount and $s_d = a_d \cdot t_d$, where $0 \leq t_d \leq t_\text{effective}$ 
 
 \begin{equation}
-t'_{\text{effective}} = \frac{t_{\text{effective}} \cdot \sum a_i}{\sum a_i \pm a_d}
+t'_{\text{effective}} = \frac{ s_t \pm s_d}{a_{stake} \pm a_d}
 \end{equation}
 
-\subsubsection{Addition}
-This introduces the time multiplier being diluted with the introduction of additional shares, the proportion of which is equal to the active share amount. For example, Bob has a balance of 1000 shares with an effective time weight of 100 days. Bob decides to deposit an additional 500 shares:
+\subsubsection{\signifier Addition}
+The introduction of additional shares subjects the time multiplier to dilution, proportional to the total realised share amount. For example, Bob has a balance of 1000 shares with an effective time of 100 days. Bob decides to deposit an additional 500 shares where $t_d = 0$
 
 \begin{equation*}
-{t'}_{\text{effective}} = \frac{100 \cdot 1000}{1000 + 500} 
+{t'}_{\text{effective}} = \frac{(1000)(100) + (500)(0)}{1000 + 500} 
 = \frac{100{,}000}{1500} 
 = 66.7 \; \text{days}
 \end{equation*}
 
-A reduction of 33.3\% proportional to the new share balance, showcasing that addition of shares to an active position rebalances a shareholders time-weight while preserving meaningful prior contribution.
+Therefore Bob faces a reduction of 33.3\% from his increased share balance, showcasing that additional inventory to an active stakeholder position rebalances the effective time weight while preserving meaningful prior contribution. 
 
-\subsubsection{Subtraction}
+\subsubsection{\signifier Subtraction}
 
-However in the case of withdrawing or removing shares, the effective time weight is preserved in order to not disenfranchise committed stakeholders given that the share balance is a non-zero value.
+However in the case of withdrawing or decreasing shares, effective time is preserved, preventing the disenfranchisement of committed stakeholders given the resultant share balance is a non-zero value. Say Alice has a balance of 1000 shares with an effective time of 100 days, she deducts 500 shares from her active position, such that $t_d = t_\text{effective}$
 
-\subsubsection{Path-dependency}
-The variance of $t_{\text{effective}}$ is produced by the scalar product of deposit amounts and time deltas across a shareholders profile is defined as:
+\begin{equation*}
+{t'}_{\text{effective}} = \frac{(1000)(100) - (500)(100)}{1000 - 500} 
+= \frac{100{,}000 - 50{,}000}{500} 
+= 100 \; \text{days}
+\end{equation*}
+
+\subsubsection{\signifier Path Dependency}
+Defined as the variance of effective time, produced by the accumulation of deposits and associated time deltas across a stakeholders profile expressed as:
 
 \begin{equation}
 \rho = \text{Var}(\{t_{\text{effective}_i}\}_{i = 1}^{n})
@@ -122,7 +155,7 @@ The variance of $t_{\text{effective}}$ is produced by the scalar product of depo
 
 \vspace{10pt}
 
-Where higher $\rho$ reflects greater convergence in commitment, therefore tenure ($\tau$) can be defined as:
+Where a higher $\rho$ value reflects to a greater display of commitment and a lower $\rho$ corresponding to a lack of, therefore tenure ($\tau$) can be defined as:
 
 \begin{equation}
     \tau \propto \frac{d\rho}{dt}
@@ -130,10 +163,10 @@ Where higher $\rho$ reflects greater convergence in commitment, therefore tenure
 
 \vspace{10pt}
 
-A consistent trajectory produces high $\rho$ and high $\tau$, whereas irregular commitment history results varied $\rho$ but low $\tau$, both metrics acting as the product of a shareholder's \textbf{commitment profile}.
+A consistent trajectory produces high $\rho$ and high $\tau$, whereas irregular commitment warrants varied $\rho$ but low $\tau$, acting as metrics for stakeholders not solely dictated by stake or capital contribution.
 
-\subsection{Power Levels}
-Using predefined time tranches denoted by $T$, each tranche is indexed by $t_{\text{effective}}$ to define the power multiplier as $0 \leq P \leq 1$ but not constraint to. This creates natural bands across the voting power curve shaping distinct tiers or stages to the governance lifecycle. 
+\subsection{\signifier Power Levels}
+Using predefined time tranches denoted by $T$, each tranche indexed by $t_{\text{effective}}$ to correspond with the associated power multiplier where $0 \leq P_n \leq 1$. This creates natural bands across the voting power curve with distinct tiers or stages to the governance lifecycle. 
 
 \begin{equation}
     P(t_{\text{effective}}) = \begin{cases}
@@ -147,8 +180,8 @@ Using predefined time tranches denoted by $T$, each tranche is indexed by $t_{\t
 
 $T_N$ can also be expressed as $t_{max}$, where $N$ equates to the total level count and here equal to the the last tranche, defining the maximum length to constitute commitment.
 
-\subsubsection{Configurations}
-The following configurations are provided as reference, first the Agile configuration is suited to nascent or smaller organisations where governance cycles are shorter and rapid power accumulation is desirable, enabling participants to reach meaningful influence within a two year maturity arc.
+\subsubsection{\signifier Configurations}
+The following configurations are provided as reference, first the Agile configuration is suited to nascent or smaller organisations where governance cycles are shorter and rapid power accumulation is desirable, enabling participants to reach meaningful influence within a two year timespan.
 
 \vspace{5pt}
 
@@ -158,48 +191,50 @@ The following configurations are provided as reference, first the Agile configur
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
-\rowcolor{gray!100}\textcolor{white}{\textbf{$P_n$}} & \textcolor{white}{\textbf{Threshold ($T_n$)}} & \textcolor{white}{\textbf{Multiplier ($P_k$)}} \\ \hline
-$P_0$ & $T_0 = 0$ days & 0.0 \\ \hline
-$P_1$ & $T_1 = 180$ days & 0.2 \\ \hline
-$P_2$ & $T_2 = 365$ days & 0.8 \\ \hline
-$P_3$ & $T_3 = 720$ days & 1.0 \\ \hline
+\rowcolor{gray!100}\textcolor{white}{\textbf{$P_n$}} & \textcolor{white}{\textbf{Tranche ($T_n$)}} & \textcolor{white}{\textbf{Multiplier}} \\ \hline
+$P_0$ & $T_0 = 0$ days & 0.00 \\ \hline
+$P_1$ & $T_1 = 180$ days & 0.020 \\ \hline
+$P_2$ & $T_2 = 365$ days & 0.035\\ \hline
+$P_3$ & $T_3 = 720$ days & 0.070 \\ \hline
 & &  \\ \hline
 & &  \\ \hline
 & & \\ \hline
 & & \\ \hline
 \end{tabular}
-\caption{Agile ($t_{\text{max}} = 720$ days)}
+\caption{Agile}
+($t_{\text{max}} = 720$ days)
 \end{minipage}
 \hfill
 \begin{minipage}{0.45\textwidth}
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
-\rowcolor{gray!100}\textcolor{white}{\textbf{$P_n$}} & \textcolor{white}{\textbf{Threshold ($T_n$)}} & \textcolor{white}{\textbf{Multiplier ($P_k$)}} \\ \hline
-$P_0$ & $T_0 = 0$ days & 0.0 \\ \hline
-$P_1$ & $T_1 = 260$ days & 0.05 \\ \hline
-$P_2$ & $T_2 = 520$ days & 0.15 \\ \hline
-$P_3$ & $T_3 = 780$  days & 0.30 \\ \hline
-$P_4$ & $T_4 = 1040$ days & 0.50 \\ \hline
-$P_5$ & $T_5 = 1300$ days & 0.70 \\ \hline
-$P_6$ & $T_6 = 1560$ days & 0.85 \\ \hline
-$P_7$ & $T_7 = 1825$ days & 1.00 \\ \hline
+\rowcolor{gray!100}\textcolor{white}{\textbf{$P_n$}} & \textcolor{white}{\textbf{Tranche ($T_n$)}} & \textcolor{white}{\textbf{Multiplier}} \\ \hline
+$P_0$ & $T_0 = 0$ days & 0.00 \\ \hline
+$P_1$ & $T_1 = 260$ days & 0.010 \\ \hline
+$P_2$ & $T_2 = 520$ days & 0.020 \\ \hline
+$P_3$ & $T_3 = 780$  days & 0.025 \\ \hline
+$P_4$ & $T_4 = 1040$ days & 0.030 \\ \hline
+$P_5$ & $T_5 = 1300$ days & 0.045 \\ \hline
+$P_6$ & $T_6 = 1560$ days & 0.050 \\ \hline
+$P_7$ & $T_7 = 1825$ days & 0.070 \\ \hline
 \end{tabular}
-\caption{Graduated ($t_{\text{max}} = 1825$ days)}
+\caption{Progressive}
+($t_{\text{max}} = 1825$ days)
 \end{minipage}
 \end{table}
 
-The Graduated configuration is more appropriate for established organisations with existing stakeholder structures, offering a finer grained and flexible governance lifecycle across a five year maturity arc that better reflects the longer time horizons of institutional participants.
+The Progressive configuration is more appropriate for established organisations with existing stakeholder structures, offering a granular and graduated reputation across a five year maturity arc that better reflects the longer time horizons of institutional participants.
 
-\subsection{Time Weight}
+\subsection{\signifier Time Weight}
 
-Given effective time, the time weight ($W$) is calculated by iterating over power levels and applying logarithmic time, where $\Delta t_i = P_i - P_0$ translating to the tranche elapsed time.
+Given effective time, the time weight ($W$) is calculated by iterating over power levels and calculating tranche position, where $\Delta t_i$ equals to tranche elapsed time. We use logarithmic time to provide diminishing across tranche boundaries.
 
 \begin{equation}
     W(t_{\text{effective}}) = \sum_{i=0}^{N} P_i \cdot \log_2(\Delta t_i + 1)
 \end{equation}
 
-\subsection{Power Ratio}
+\subsection{\signifier Power Ratio}
 The power ratio ($\alpha$) is the proportion of root to linear in the weighting of voting power and is proportional to time, where $0 \leq \alpha \leq 1$ with $r_{min}$ being the lower bound range and $r_{max}$ being the upper bound.
 
 \begin{equation}
@@ -208,29 +243,40 @@ The power ratio ($\alpha$) is the proportion of root to linear in the weighting 
 
 \vspace{10pt}
 
-Where $\alpha = 1$ equates to fully linear weighting and $\alpha = 0$ to entirely root weighting For ideal power structures that align with the research in this study the default recommendations are $r_{min} = 0.2$ and $r_{max} = 1$, translating from composite weighting until convergence to fully linear. Lastly variable $k$ is defined as curve coefficient.
+Where $\alpha = 1$ equates to complete linear weighting and $\alpha = 0$ to entirely root weighting. For power structures that align with the research in this study the default recommendations are; $r_{min} = 0.2$ and $r_{max} = 1$, equating to initial composite weighting of 80\% root and 20\% linear, until convergence to fully linear. Lastly $k$ is defined as the curve coefficient.
 
 \begin{equation}
-    k \in (0, 1)
+    k \in (0, 2)
 \end{equation}
 
 \vspace{10pt}
 
-For more concave growth $k \in [0, 0.5]$ produces such a curve, while $k \in [0.5, 1]$ exhibits more linear traditional growth. The default recommendation of $k = 0.5$ to complement the time weight's 
-logarithmic function and normalise curve stratification to providing diminishing returns across tranches.
+For a concave curve $k \in [0, 0.5]$ produces such, while $k \in [0.5, 1]$ exhibits a linear curve and $k \in [1, 2]$ for a convex curve. Plotting $\alpha$ for $k$, assuming $t_{max} = 720$ days results
 
-\subsection{Voting Power}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.05\textwidth]{power_ratio.png}
+    \caption{Power ratio series}
+    \label{fig:power-ratio}
+\end{figure}
 
-Where $S$ is the share amount, $W$ is the time weight and $\alpha$ is the power ratio.
+The default recommendation of $k = 0.5$ is to complement the time weight's logarithmic function and normalise stratification in providing diminishing returns across tranches.
 
-\vspace{5pt}
+\subsection{\signifier Voting Power}
+
+Where $S$ is the share amount or stake, which brings us to define voting power ($V_P$) as
 
 \begin{equation}
     V_P = W(\alpha \cdot S + \sqrt{S}(1-\alpha))
 \end{equation}
 
+\vspace{10pt}
 
-\section{Sample}
+Know that S can be referred to as the \emph{canonical} weight and that voting influence ($V_I$), the total authority of a stakeholder, be declared as $S + V_P$
+
+\section{\signifier Sample}
+
+Acknowledge that $k = 0.5$, $r_{min} = 0.2$ and $r_{max} = 1$ for all results associated herein.
 
 \begin{table}[H] 
 \centering
@@ -250,7 +296,7 @@ Where $S$ is the share amount, $W$ is the time weight and $\alpha$ is the power 
 \cmidrule(lr){2-6}
  & \textit{Subtotal} & – & 158 & 50,000 & 50.0\% \\
 \midrule
-Team  & – & 10,000 & 1 & 10,000 & 10.0\% \\
+Insiders  & – & 10,000 & 1 & 10,000 & 10.0\% \\
 Liquidity  & – & 10,000 & 1 & 10,000 & 10.0\% \\
 Operations & – & 40,000 & 1 & 40,000 & 30.0\% \\
 \midrule
@@ -269,326 +315,406 @@ Operations & – & 40,000 & 1 & 40,000 & 30.0\% \\
 \bottomrule
 \end{tabularx}
 \caption{Share distribution and onboarding schedule}
-\label{tab:full_governance_table}
+\label{tab:share-distribution-schedule}
 \end{table}
 
-To replicate a more realistic distribution, shareholder actors from each tier are added gradually over 80 day period to portray the temporal dynamics of voting power when bootstrapping a governing body. Share distribution features tiered holder structure with two pairs of demographics with equal asset allocation but varied distribution to showcase root weighting in effect. Know that for this sample $r_{min} = 0.2$, $r_{max} = 1$ and $k = 0.5$.
+In pursuit of replicating a realistic share distribution, stakeholders from each tier are added gradually over 80 day period to portray the temporal dynamics of voting power. Share distribution features tiered actor structure with two pairs of demographics with equal asset allocation to showcase composite weighting in effect.
 
-\section{Bootstrapping}
+\section{\signifier Enduation}
 
-Organisations looking to transition have multitude of options for configuration, such as the two prior mentioned configurations and the parameters when it comes to architecting a voting power curve. Given the volatility of voting power in PV especially in the early stages risks what could be potentially adversarial capture. \\\\
- Precautionary measures include \textbf{a)} excluding time-weighting for external stakeholders until a cut off period or \textbf{b)} preemptively configuring  $t_{\text{effective}}$ acting as buffer for internal stakeholders. This provides clear internal advantage versus external stakeholders which ultimately converges when $t_{max}$ is reached, alternatively diverges if internal actors decide to offload shares in face of decreased voting power or increase share count for reciprocal dilution. Providing founding members assurances in how authority will be managed relative to the benefits and risks of public market exposure previously impossible to achieve in prior voting models.
+We present the process of enduement coined as "enduation", defined as endowing or allocating rights to individuals, herein declared as temporal enhanced voting rights. Organisations can curate deployments through the previously discussed configuration options and the parameters required to architecting the voting power curve. However in addressing the volatility of voting power that could be deemed as a material risk we propose: 
 
-\section{Power Progression}
+\begin{itemize}[label=,leftmargin=\parindent]
+\item\textbf{a) Preemptively assigning time-weights} acting as a buffer for insiders, providing a clear internal advantage versus external stakeholders. That ultimately dissipates on convergence or when subject to expiry.
+\item\textbf{b) Selective time-weighting} for insiders up until a cutoff period for uniform scoring.
+\end{itemize}
 
-\subsection{Agile}
- 
-The Agile configuration results in three key power accumulation points and early contentious discrepancies between the Major, Large and Median demographics. With highlight to the Median group directly competing with the Major category at points, although retaining a reduced share allocation exhibiting the early root weighting in effect.
+\noindent Providing organisations explicit guardrails to manage authority relative to the benefits and risks of public market exposure, such assurances have arguably been difficult to orchestrate under prior voting models.
+
+\section{\signifier Results}
+
+\subsection{\signifier Agile}
  
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{power_progression_agile.png}
-    \caption{Agile power progression series}
-    \label{fig:gini}
+    \caption{Agile configuration power series}
+    \label{fig:agile-power}
 \end{figure}
 
-The early competitiveness diverges overtime as $\alpha$ transitions towards purely linear weighting. Additionally the Large demographic resolves as the dominant option before reaching $t_{max}$ due to increased stakeholders but yet equal allocation versus the Major category.
+Furthermore conducting pairwise analysis demonstrates that proportionality amongst stakeholder constituencies is not preserved yet converges to normalcy as $\alpha$ approaches $r_{max}$
 
- \subsection{Graduated (Bootstrapped)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{power_progression_ratios_ridgeline.png}
+    \caption{Agile pairwise voting ratios}
+    \label{fig:agile-pairwise}
+\end{figure}
 
-Here we witness seven discrete growth phases with similar dynamics as showcased with the Agile deployment but stagnated to be aligned to institutional timespans. The Team category is introduced with 10,000 shares and a buffer where $t_{\text{effective}} = T_2$ (520 days), therefore ultimately bypassing the first two tranches as a predefined advantage.
+A clear distinction can be witnessed between the Major-Large and Small-Minor ratios, where both Large and Small directly compete with the equivalent demographics across $T_1$ and $T_2$. Stemming from increased holder counts despite an equal allocation, carrying increased voting rights due to root weighting. The oscillations in voting ratios are consistent with the onboarding schedule, omitting for a static schedule where all shares are distributed 0 day, produces the series to conform to be monotonic. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{power_progression_static_schedule.png}
+    \caption{Agile synchronous pairwise voting ratios}
+    \label{fig:agile-sync-pairwise}
+\end{figure}
+
+What this illustrates is how representation is enhanced under Polycentric Voting, relationships of which part have a larger allocation, follow an ascending order and those which of have a reduced follow a descending order. Empowering minority voters across the voting power curve until achieving convergence towards linear weighting.  
+
+\vspace{15pt} 
+\hrule 
+\vspace{10pt}
+
+\noindent Thus it can be established that under the model canonical weight is not directly equal to voting rights, two voters may hold equivalent stakes but have drastically different influence. The magnitude being dictated by the parameters of which the voting power curve is architected and how voters exercise commitment.
+
+\newpage
+
+ \subsection{\signifier Progressive}
+
+With the inclusion of the Insiders category and assigned buffer where $t_{\text{effective}} =$ 260 days, creates a predefined advantage under the act of enduement. Bypassing the first tranche and holding undisputed dominance until contending demographics coincide to convergence.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{power_progression_graduated.png}
-    \caption{Graduated power progression series}
-    \label{fig:gini}
+    \caption{Progressive configuration power series}
+    \label{fig:progressive-power}
 \end{figure}
 
-The buffer results in the Team demographics reaching convergence at $T_5$ and although having an equal share allocation to the Median category results in increased voting power by a factor of 2.2x. It is to note that the Team plot doesn't share identical symmetry with other categories because \textbf{a)} is it a single participant versus accumulated power and \textbf{b)} all shares are onboarded at day 0 versus a gradual schedule. \\\\ Bootstrapping gives organisations the predictability to integrate PV without the risk of adversarial control but with the flexibility to disperse or retain authority in response to power dynamics. 
+Insiders converge at $T_6$ and although having an equal share allocation to the Median category results in an approximate voting power advantage by a factor of 1.5x. It is to note that the series doesn't share identical symmetry with other categories because \textbf{a)} is it a single participant versus accumulated power and \textbf{b)} all shares are onboarded at day 0 versus the contrary gradual schedules. 
 
-\section{Power Analysis}
+\section{\signifier Analysis}
 
-Using the Banzhaf power index \cite{banzhaf1965} we can approximate the basis of influence between PV and traditional shareholder weighted-voting (plutocracy) benchmarked using the Agile configuration.
+Using the Banzhaf power index ($B_i$) we can approximate the relative influence of authority in cooperative $n$ person voting games \cite{banzhaf1965}. Where $i$ is the voter index, $n$ is the total voter count, then $c_i$ is the number of times voter $i$ is \emph{critical} (swing vote) and $c_k$ being the equivalent for index $k$. 
+
+\begin{equation*}
+B_i = \frac{c_i}{\sum_{k=1}^{n} c_k}
+\end{equation*}
+
+\vspace{10pt}
+
+Note that for all groups par Control, voter weights correspond to $V_I$ otherwise equating to canonical weight $S$ and where the quota $q$ translates to a simple majority at 51\% of the total weight across all voters.
+
+ \subsection{\signifier Control}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{banzhaf_plutocracy.png}
-    \caption{Plutocracy power complex series}
-    \label{fig:gini}
+    \caption{Control power index series}
+    \label{fig:control-banzhaf}
 \end{figure}
 
-We can see an incremental but immediate transition to a static hierarchy in plutocracy but remains unchanged overtime given quorum is equal to $33\%$ of the total active share count (16,500).
+We can see an incremental but immediate transition to a static hierarchy that remains unchanged overtime in the context of the traditional weighted-voting.
+
+ \subsection{\signifier Agile}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{banzhaf_pv.png}
-    \caption{PV power complex series}
-    \label{fig:gini}
+    \caption{Model power index series}
+    \label{fig:polycentric-banzhaf-agile}
 \end{figure}
 
-Whereas in the case of PV we can see a clear contention of power in the early phases of $T_1$ with clear volatility, not only this but we that dominant coalition of large reaches an even more significant threshold of power accumulation and at a later date versus plutocracy. With clear convergence back to plutocratic means towards $t_{max}$, here quorum is equal to $33\%$ of total aggregated voting power.
+Whereas in the case of Polycentric Voting a dynamic trend is observed with increased but consistent volatility. The dominant Large category reaches an even more significant threshold of power at a later date versus control, additionally Minor and Small temporarily diverge at $T_2$ with then Minor leading until converging again at $t_{max}$
+
+\subsection{\signifier Agile-Control}
+ 
+Alas normalising the weights to the share scale and assigning $q$ as 51\% of the total canonical weight, results in a far greater dynamic landscape. 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{banzhaf_cross.png}
-    \caption{PV normalised power complex series}
-    \label{fig:gini}
+    \caption{Normalised model power index series}
+    \label{fig:polycentric-normalised-banzhaf-agile}
 \end{figure}
 
-Furthermore, normalising the distribution to the base share scale and denominating the quota or quorum by share count displays a different landscape. Immediately an inverse order is observed between Minor and Small demographics showcasing a small but profound amplified representation for smaller stakeholders. Additionally exhibiting larger volatility but with high-frequency mean reversion.
+Immediately we can see that Small demographic receives amplified representation, even now directly competing with the Median category before $T_1$. Additionally, the Minor and Small demographics face an inverse order with a larger disparity.
 
-\vspace{5pt}
+\subsection{\signifier Benchmark}
 
-\begin{table}[h]
+When comparing the results for range and variance of the three Agile power series from day 80, to filter for the noise of the onboarding schedule. It illustrates that Control by empirical construction conforms to a static order as the range remains unchanged, on the contrary to Polycentric which maintains a dynamic order. 
+
+\begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{cXXX}
 \toprule
-\textbf{Day} & \centering\textbf{Plutocracy} & \centering\textbf{PV} & \centering\arraybackslash\textbf{Normalised PV} \\
+\textbf{Day} & \centering\textbf{Control} & \centering\textbf{Polycentric} & \centering\arraybackslash\textbf{Polycentric*} \\
 \midrule
-90  & \centering 0.0728 & \centering 0.0893 & \centering\arraybackslash 0.1047 \\
-180 & \centering 0.0728 & \centering 0.1114 & \centering\arraybackslash 0.1765 \\
-270 & \centering 0.0728 & \centering 0.0996 & \centering\arraybackslash 0.1070 \\
-365 & \centering 0.0728 & \centering 0.0855 & \centering\arraybackslash 0.1314 \\
-450 & \centering 0.0728 & \centering 0.0857 & \centering\arraybackslash 0.1072 \\
-540 & \centering 0.0728 & \centering 0.0819 & \centering\arraybackslash 0.1034 \\
-630 & \centering 0.0728 & \centering 0.0804 & \centering\arraybackslash 0.1086 \\
-720 & \centering 0.0728 & \centering 0.0791 & \centering\arraybackslash 0.1559 \\
+90  & \centering 0.0868 & \centering 0.0944 & \centering\arraybackslash 0.1764 \\
+180 & \centering 0.0868 & \centering 0.0981 & \centering\arraybackslash 0.1812 \\
+360 & \centering 0.0868 & \centering 0.1314 & \centering\arraybackslash 0.1915 \\
+450 & \centering 0.0868 & \centering 0.1564 & \centering\arraybackslash 0.1134 \\
+630 & \centering 0.0868 & \centering 0.1796 & \centering\arraybackslash 0.1991 \\
+800 & \centering 0.0868 & \centering 0.0868 & \centering\arraybackslash 0.0868 \\
 \midrule
-\textbf{Variance} & \centering\textbf{0.000896} & \centering\textbf{0.001291} & \centering\arraybackslash\textbf{0.002257} \\
+\textbf{Variance} & \centering\textbf{0.000000} & \centering\textbf{0.000847} & \centering\arraybackslash\textbf{0.000803} \\
 \bottomrule
 \end{tabularx}
-\caption{Power ranges and variance values}
-\label{tab:power_range}
+\caption{Power range values}
+\label{tab:polycentric-banzhaf-ranges}
 \end{table}
 
-Comparing the results for range and variance of the three power series portrays a even more telling argument, that plutocracy by quantitative definition conforms to a static power structure as the range stays unchanged throughout, on the contrary to the second plot where clear deviations are visible. The normalised plot exhibits a range increase by a factor of $50\%$ from start until reaching convergence, showcasing how volatile power dynamics are under the model. Analysing the variances reinforces these assumptions, where PV and its normalised series share x10 and equivalent x20 increases in the variance of power in comparison to plutocracy therefore expressing how sensitive quorum declaration is under the model.
+The Polycentric plot exhibits a range increase by approximately $100\%$ over the course of the voting power curve, the normalised plot being less volatile. Yet at convergence both subsequently decrease to coincide with Control's static range, highlighting the transition to linear weighting. The summed variance of all categories reinforces these assumptions, where Control equates to zero and the normalised plot exhibiting a larger shift in power in comparison to its original series.  
 
-\section{Strategies}
+ \subsection{\signifier Progressive-Control}
+ 
+Following the basis of the prior control series, applying the same methodology to the associated plots illustrates how precise Enduation can assist in the architecting of voting power.
 
-\subsection{Singleton}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{progressive_banzhaf_cross.png}
+    \caption{Normalised model power index series}
+    \label{fig:polycentric-normalised-banzhaf-progressive}
+\end{figure}
+
+Resulting in a gradual transfer of authority from insiders, from unequivocal control up until day 1250, to approximate terms of influence to other constituencies at approximately day 2000. The abrupt but oscillating shifts throughout tells us of the Insider's influence being inversely proportional to the sum of total stakeholder constituencies.  
+ 
+\vspace{15pt} 
+\hrule 
+\vspace{10pt}
+ 
+\noindent When voting power and capital are treated as equal, organisations can lose foresight on future authorial ownership when accepting external capital for offered stock. Enduement not only permits organisations the capability to programmatically design ownership arrangements but also adopting the benefits that incorporation has to offer. Enabling congruency in ownership for founders and employees, that carry increased voting power and preset authoritative trajectories that aid transition to common ownership.
+
+\newpage
+
+\section{\signifier Strategies}
+
+\subsection{\signifier Singleton}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{pv_strategy_singleton_light.png}
-    \label{fig:gini}
+    \label{fig:strategy-singleton}
 \end{figure}
 
 \vspace{-15pt}
 
 A stakeholder contributes a singular denomination stake, which results in the most absolute state of voting power accumulation and weight. For example, Bob locks 10,000 shares without any subsequent deposits or withdrawals until maturity.
 
-\subsection{Sequential}
+\subsection{\signifier Sequential}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{pv_strategy_sequential_light.png}
-    \label{fig:gini}
+    \label{fig:strategy-sequential}
 \end{figure}
 
 \vspace{-15pt}
 
 A stakeholder strategically obtains or locks shares gradually to dilute their time weight at an optimal threshold to allow voting power to compound effectively. For example, Alice locks 3,333 shares and subsequent deposits at; 1,667 shares at 90 days, 2,500 shares at 180 days and 2,500 at 270 days. 
 
-\subsection{Dynamic}
+\subsection{\signifier Dynamic}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{pv_strategy_dynamic_light.png}
-    \label{fig:gini}
+    \label{fig:strategy-dynamic}
 \end{figure}
 
 \vspace{-15pt}
 
 A stakeholder actively manages their position through partial withdrawals and redeposits. Unlike Singleton or Sequential strategies which are monotonic, the Dynamic actor introduces deliberate discontinuities. For example, Arthur locks 5,000 shares then withdraws 2,500 shares at 180 days, acquires an additional 5,000 shares at day 365 and finally withdraws 2,500 shares at day 540. 
 
-\subsection{Splitting}
+\subsection{\signifier Splitting}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{pv_strategy_splitting_light.png}
-    \label{fig:gini}
+    \label{fig:strategy-splitting}
 \end{figure}
 
 \vspace{-15pt}
 
-A stakeholder aims game the model executing a Sybil attack. For example, Claude has 10,000 shares and splits the balance to 10 different accounts, amplifying their voting power temporally due to the root weighting.
+A stakeholder aims game the model executing a Sybil attack. For example, Claude has 10,000 shares and splits the balance to 100 different accounts, in attempt of amplifying voting power temporally due to the root weighting.
 
-\subsection{Benchmark}
+\subsection{\signifier Benchmark}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{strategies.png}
     \caption{Strategies voting power series}
-    \label{fig:gini}
+    \label{fig:strategy-power}
 \end{figure}
 
 \begin{table}[h]
 \centering
-\begin{tabularx}{\textwidth}{l*{6}{>{\centering\arraybackslash}X}}
+\begin{tabularx}{\textwidth}{l*{5}{>{\centering\arraybackslash}X}}
 \toprule 
-Strategy & 3 Months & 6 Months & 12 Months & 24 Months & Impact \\
+Strategy & 90 Days & 180 Days & 365 Days & 980 Days & Convergence \\
 \midrule
-Singleton & 10,190 & 13,060 & 69,931 & 159,852 & +0\% \\
-Sequential & 3,402 & 8,208 & 54,409 & 150,531 & -6\% \\
-Splitting & 11,473 & 13,364 & 58,835 & 79,928 & -50\% \\
-Dynamic & 5,100 & 3,270 & 17,495 & 68,785 & -57\% \\
+Singleton & 732 & 906 & 3,195 & 10,072 & 720d \\
+Sequential & 335 & 562 & 2,356 & 10,072 & 848d \\
+Splitting & 784 & 960 & 3,280 & 10,072 & 720d \\
+Dynamic & 513 & 454 & 955 & 10,072 & 919d \\
 \bottomrule
 \end{tabularx}
 \caption{Strategy voting power}
-\label{tab:strategy}
+\label{tab:strategy-power}
 \end{table}
 
 \begin{table}[h]
 \centering
 \begin{tabularx}{\textwidth}{l*{5}{>{\centering\arraybackslash}X}}
 \toprule 
-Strategy & 3 Months & 6 Months & 12 Months & 24 Months & Average \\
+Strategy & 90 Days & 180 Days & 365 Days & 980 Days & Average \\
 \midrule
-Singleton & 1,310 $V_{p}$/s & 840 $V_{p}$/s & 2,218 $V_{p}$/s & 2,534 $V_{p}$/s & 1,726 $V_{p}$/s \\
-Sequential & 437 $V_{p}$/s & 528 $V_{p}$/s & 1,725 $V_{p}$/s & 2,386 $V_{p}$/s & 1,269 $V_{p}$/s \\
-Splitting & 1,476 $V_{p}$/s & 859 $V_{p}$/s & 1,866 $V_{p}$/s & 1,267 $V_{p}$/s & 1,367 $V_{p}$/s \\
-Dynamic & 656 $V_{p}$/s & 210 $V_{p}$/s & 555 $V_{p}$/s & 1,090 $V_{p}$/s & 628 $V_{p}$/s \\
+Singleton & 8.13 $V_{p}$/day & 5.03 $V_{p}$/day & 8.75 $V_{p}$/day & 10.28 $V_{p}$/day & 8.05 $V_{p}$/day \\
+Sequential & 3.72 $V_{p}$/day & 3.12 $V_{p}$/day & 6.45 $V_{p}$/day & 10.28 $V_{p}$/day & 5.89 $V_{p}$/day \\
+Splitting & 8.71 $V_{p}$/day & 5.33 $V_{p}$/day & 8.99 $V_{p}$/day & 10.28 $V_{p}$/day & 8.33 $V_{p}$/day \\
+Dynamic & 5.70 $V_{p}$/day & 2.52 $V_{p}$/day & 2.62 $V_{p}$/day & 10.28 $V_{p}$/day & 5.28 $V_{p}$/day \\
 \bottomrule
 \end{tabularx}
 \caption{Strategy power rates}
-\label{tab:strategy_rates}
+\label{tab:strategy-rates}
 \end{table}
 
-While token-splitting is advantageous in the short-term, it ultimately fails to increase voting power overtime but actually expenses a stakeholder's influence by approximately 50\% due to the time weighting loss. Following the Nash equilibrium theorem \cite{nash1950}, we can identify the Singleton strategy as the dominant strategy, the Sequential strategy as the equilibrium strategy and the Splitting and Dynamic strategies as the suboptimal.
+While Splitting is marginally advantageous in the short-term, it ultimately fails to be effective for reasons of \textbf{a)} the advantage is temporary and \textbf{b)} operational costs required to orchestrate the strategy. Consequently highlighting how the root weighting increases representation across minority stakeholders. Therefore we can identify the Singleton and Splitting as the dominant strategies, the Sequential strategy as the equilibrium strategy and the Dynamic strategy as the suboptimal.
 
-\section{Commitment Profiles}
+\section{\signifier Metrics}
 
-Plotting the effective time series for the pre-discussed strategies exhibits some interesting realisations, where the small but tactical deposits of the Sequential strategy dilutes proportionally albeit with larger divergence. On the contrary to the Dynamic strategy, which reduces inventory without effect in $T_1$ and then proceeds to acquire shares at $T_2$ translating in a 65\% dilution to rebalance.
+Path dependency gives us a singular rubric to assess commitment relative to inventory, plotting $\tau$ quantifies the rate of change of commitment. The Sequential strategy growing at an exponent rate at the later point in the series from compounding deposits with the Singleton strategy dominating early. Finally the Dynamic strategy regressing at $T_2$ as a result of dilution from additional inventory but rebounds after $t_{max}$.  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{path_dependency_rho.png}
+    \caption{Strategy path dependency series}
+    \label{fig:strategy-rho}
+\end{figure}
+
+
+Plotting the effective time series for the pre-discussed strategies exhibits some interesting realisations, where the small but tactical deposits of the Sequential strategy dilutes proportionally albeit with larger divergence.  On the contrary to the Dynamic strategy, which reduces inventory without effect in $T_1$ and then proceeds to acquire shares at $T_2$ translating in a 65\% dilution to rebalance.
 
 \begin{figure}[H]
     \centering
     \hspace*{-.8cm}
     \includegraphics[width=1.05\textwidth]{path_dependency.png}
     \caption{Strategy effective time series}
-    \label{fig:teffective}
+    \label{fig:strategy-time}
 \end{figure}
 
-The findings become more even compelling when $\rho$ is plotted for the equivalent strategies, we get a clear sense of each stakeholders trajectory. 
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\textwidth]{path_dependency_rho.png}
-    \caption{Strategy path dependency series}
-    \label{fig:paths}
-\end{figure}
+Asserting that tenure provides a general metric for stakeholders not independently constituted by stake, in case which.
 
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{l*{6}{>{\centering\arraybackslash}X}}
-\toprule
-Strategy & d=90 & d=180 & d=365 & d=540 & d=720 & d=1220 \\
-\midrule
-Singleton  & 7.6667 & 15.1667 & 30.5833 & 45.1667 & 60.1667 & 61.8621 \\
-Sequential & 7.6524 & 8.1008  & 9.3261  & 18.8994 & 35.1995 & 64.8773 \\
-Dynamic    & 7.6667 & 15.1667 & 30.5797 & 22.5281 & 17.8860 & 44.1028 \\
-\bottomrule
-\end{tabularx}
-\caption{Strategy tenure values}
-\label{tab:tenure}
-\end{table}
+\newpage
 
-Furthermore calculating the $\tau$ values quantifies the rate of change for commitment. The Sequential strategy growing at an exponent rate at the later point in the series from compounding deposits, the Singleton strategy dominating early and finally Dynamic strategy clearly regressing $T_2$ reduction but rebounding towards $t_{max}$. Tenure provides a metric for stakeholders not solely dictated by capital.
+Rebalancing the Singleton and Sequential strategies to a total of 100 shares and decreasing the Dynamic strategy's total shares to 2,000 can showcase just that, now carrying a capital advantage to the factor of 20. 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{tenure_benchmark.png}
-    \caption{Dynamic versus Singleton tenure series}
-    \label{fig:tenurei}
+    \caption{Strategy tenure series}
+    \label{fig:strategy-tau}
 \end{figure}
 
-Rebalancing the Singleton strategy to 100 shares and decreasing the Dynamic strategy's initial and final share counts to 2,000 can showcase just that, Dynamic now having a x20 capital advantage. Yet its reduction in $\tau$ results from the dilution of acquiring additional shares, in contrast to the Singleton strategy which remains monotonic. Although with time an inflection point reveals to where Dynamic takes lead, simply because of the increased frequency of deposits relative to the Singleton strategy. Yet the initial movements of the plot show us something crucial, $\rho$ and $\tau$ are not reducible to capital alone but are composed of a set of actions of how that capital is applied and the duration are retained towards organisation function. 
+Dynamic's $\tau$ reduction resulting from the dilution of acquiring additional shares with contrast to the Singleton strategy which remains monotonic. Although with time an inflection point reveals the Dynamic strategy is scored more favourably but less than Sequential, simply because of the increased frequency of deposits relative to the Singleton strategy. Therefore $\rho$ and $\tau$ are not reducible to stake alone but rather are a product of how that resource is exercised overtime.
 
-\section{Emergent Properties}
+\section{\signifier Emergent Properties}
 
-\subsection{Vote Provenance}
-Every vote is implicitly backed by a verifiable profile $t_{\text{effective}}$, $\rho$ and $\tau$ requiring no additional infrastructure. This creates a transparent signal of governance legitimacy that persists independently of voting outcomes, enabling participants to distinguish committed actors from transient capital throughout the governance lifecycle.
+\subsection{\signifier Vote Provenance}
+Every vote is implicitly backed by a verifiable profile $\rho$, $\tau$ and $t_{\text{effective}}$ requiring no additional infrastructure. This creates a transparent signal of governance legitimacy that persists independently of voting outcomes, enabling participants to distinguish committed from transient actors throughout the governance lifecycle.
 
 \subsection{Coalition Building}
 Through introducing opacity in power progression, the model naturally incentivises cooperation, where participants within similar time-weighted tranches find strategic alignment. This creates an emergent governance landscape where shared experience and comparable power levels encourage collaborative strategies.  
 
-\subsection{Sybil Resistance}
-While PV does not prohibit token splitting it renders it structurally self-defeating. A participant fragmenting a balance across $n$ accounts of equal denomination trades a single consolidated $t_{\mathrm{effective}}$ trajectory for $n$ independent trajectories, each accumulating commitment in isolation. The benefit of splitting is temporary, as $\alpha$ progresses toward $r_{max}$, the linear weighting of the consolidated position dominates and the fragmented accounts collectively underperform by approximately 50\% at maturity. 
+\subsection{\signifier Competitive Hierarchy}
+The dilution mechanics of effective time continuously rebalance authority in response to changes in share supply. When new shares enter the system, existing commitment trajectories are diluted proportionally, compressing the advantage of established holders and creating competitive space for incoming participants producing a self-regulating hierarchy.
 
-\subsection{Graduated Proposals}
-Given the nature of the nuance of voting demographics in PV, the only logical decision to replicate that on the application layer is through tiered proposals by severity (critical, high, medium and low). Each with equivalent quorum and duration parameters to match, this mediates any short term advantages in voting power for any critical decisions through continuous voting periods and additionally caters to agile and effective decision making for lower severity ballots. 
+\subsection{\signifier Graduated Proposals}
+Given the temporal nature of voting power, and the shifts in power associated herein, we propose a new model for shareholder proposals through separated, tiered (low, medium and high) ballots. Each level with associated policy constraints or rules; like operational permissions, limiting asset expenditures or restructuring as highly salient institutional action. Every tier with equivalent quorum and duration parameters to match, mitigating any short term advantages in voting power for any critical decisions through continuous voting periods but additionally catering to agile decision making for lower priority ballots. 
 
-\subsection{Competitive Hierarchy}
-The dilution mechanics of $t_{\mathrm{effective}}$ continuously rebalance governance authority in response to changes in share supply. When new shares enter the system, existing commitment trajectories are diluted proportionally, compressing the advantage of established holders and creating competitive space for incoming participants producing a self-regulating hierarchy.
+\section{\signifier On Delegation} 
 
-\section{On Delegation} 
+\subsection{\signifier Mechanics}
 
-\subsection{Mechanics}
+Delegation now has multiple new configurations; the default being \textbf{None} as the most conservative recommendation if vote leasing is deemed a material risk. Where delegation is permitted, the following features can be used individually or in combination:
 
-Delegation in PV supports several configurations, with full restriction (\textbf{None}) being the most conservative recommendation if vote leasing is deemed a material risk. Where delegation is permitted, the following may be applied individually or in combination:
+\noindent\textbf{Revocation}: To disenfranchise secondary market exposure to voting power and give agency to counter adversarial capture, delegators should retain full rights to revoke or redirect voting power \textbf{at any time even if utilised in an active ballot}.
 
-\textbf{Revocability}: To disenfranchise secondary market exposure to voting power and fight adversarial capture, delegators should retain full rights to revoke or redirect voting power \textbf{ at any time even if utilised in a pending or active ballot.}
+\noindent\textbf{Expirations}: Given that delegation is a temporal transfer of authority. It is advised to enforce a maximum delegation period due to the fact of idle delegations accrue significant voting power overtime which at times delegators can become unaware to prior arrangements. 
 
-\textbf{Expirations}: Given that voting power in transient, it is advised to enforce a maximum delegation period due to the fact of idle delegations accrue significant voting power overtime which at times delegators can become unaware to prior arrangements. 
+\subsection{\signifier Vote Leasing}
 
-\subsection{Vote Leasing}
-
-While vote leasing in shareholder governance has long been scrutinised, PV's time-stratified structure transforms these dynamics by creating significant friction for governance attacks. Unlike pure plutocracy where 51\% control requires acquiring shares equivalent to that voting threshold, delegation attacks face compounding constraints: limited market depth and fragmented negotiations across stakeholders with heterogeneous time weights - shifting governance attacks \textbf{from capital allocation problems to multi-period coordination challenges} with significantly higher execution risk.
-
-Furthermore if revocability is enabled, this fundamentally changes how pricing is structured in secondary markets, given that revocability ensures that no delegation transfer retains authority within a fixed timespan exchange contracts must be modelled on a per second basis.
-
-While identifying the potential risks of vote leasing we can also weigh its potential benefits, such as bolstering the incentives to contribute to organisational governance given that influence becomes an inherent economic incentive to stakeholders and who can hedge against secondary market exposure through leasing to retain their commitment. 
-
-\subsection{Empty Voting}
-
-\textbf{Hu and Black (2006)} identified empty voting as the systematic decoupling of voting rights from economic exposure in shareholder governance \cite{hu2006}. In plutocracy, empty votes form across generalised financial instruments like derivatives and lending arrangements, all producing voting rights without exerted commitment, distributing the attack surface across the entire liquid market with no structural resistance.
-
-An empty vote is a vote with no commitment behind it: zero $\tau$ by definition, carrying voting rights without the conviction that legitimises governance authority. PV does not eliminate empty voting problem but fundamentally restructures it, derivative instruments and lending markets are structurally decoupled positions that fail to be attested to governance function with $t_{\text{effective}}$ regardless of notional exposure. Venues consolidating derivative and spot balances to circumvent this face a self-defeating constraint: continuous rebalancing produces anomalously low $\tau$, saturating rather than amplifying influence over time as observed under the Dynamic strategy.
-
-Leased positions are not empty votes, while delegation carries the delegator's full $\tau$, the commitment profile is genuine, earned through sustained participation, and travels with the authority for the duration. The temporal transfer of $\tau$ to a low or zero $\tau$ actor is not itself an empty vote - it is a realignment of power derivative of the delegator. The commitment profile does not transfer ownership, only function, the delegator remains the source of legitimacy for the duration and revocation returns authority unconditionally. Delegated authority in PV is always tethered, empty voting is orphaned authority. PV compresses the empty voting attack surface from the entire financial instrument landscape into a single unified process - one with defined mechanics, revocability and structural scarcity.
-
-\section{Polycentrism}
-
-Ostrom identified eight design principles that characterise sustainable collective governing bodies and that such systems as polycentric in nature. So we map her eight framework empirical conditions for effective common governance by construction rather than by approximation: \\
-
-\begin{enumerate}
-\item \textbf{Clearly Defined Boundaries:} PV defines participation boundaries through share ownership and commitment. The system knows exactly who is participating, with what capital, and for how long. Yet $t_{\text{effective}}$ creates a second boundary defined through how an actor demonstrates commitment defining a trajectory, participation is clearly defined two axes capital and time.
-
-\item \textbf{Congruence Between Rules and Local Conditions:} Organisations have the flexibility to set parameters $T$, $P$, $t_{\text{max}}$, $r_{min}$, $r_{max}$ and $k$ values to shape the governance lifecycle. A new organisation and a mature cooperative operate under fundamentally different stakes and PV can adapt accordingly with options such as the Agile and Graduated configurations for integration.
-
-\item \textbf{Collective Choice Arrangements:} Given how no deployment of PV is to be the same through the means of defining an organisation's rules and conditions, presents an interesting dynamic. Where organisations may have to and have the agency to, collectively recontextualise the parameters that makeup commitment in any deployment due to changing conditions.
-
-\item \textbf{Monitoring:} Vote provenance provides monitoring, every vote is backed by a verifiable commitment profile $t_{\mathrm{effective}}$, $\rho$ and $\tau$ requiring no external metrics or framework. The system produces its own metrics as a byproduct of the commitment mechanics. Any actor can inspect and predict any other participant's trajectory at any time, making governance behaviour transparent.
-
-\item \textbf{Graduated Sanctions:} Sybil attacks are not prohibited but are mathematically penalised as observed through the 50\% voting power loss at maturity for Splitting strategy versus Singleton. Inconsistent commitment produces anomalous $\rho$ and consequently low $\tau$. The sanction is self-enforcing through the effective time mechanic and scales with the severity of the behaviour and requires no external enforcement.
-
-\item \textbf{Conflict Resolution Mechanisms:} Delegation in PV retains full revocability by the delegator at any time even during an active proposal. A participant who delegates authority and subsequently disagrees with how it is being exercised can unconditionally reclaim their voting power without requiring a new proposal or external arbitration. Revocability is the conflict resolution mechanism for adversarial capture that originates from secondary markets or malfeasance. 
-
-\item \textbf{Recognition of Rights to Organise:} PV facilitates the right to self-organise through the normalisation of voting power across graduated time weight tranches. Participants within equivalent commitment tiers share comparable influence, creating conditions for natural coalition building. The emergent demographic stratification produced by the tranche structure where participants of similar tenure find strategic alignment is polycentrism's self-organising property formalised as a mechanical consequence of the commitment architecture.
-
- \item \textbf{Nested Enterprises:} Graduated proposals create genuinely nested governance layers by severity - low proposals resolve within accessible tranche thresholds while critical proposals require convergence across the full voting spectrum. Each tier is embedded within the next, routine decisions resolve locally while consequential decisions require cross consensus. A nested governance architecture formalised mechanically rather than prescribed by policy.
- 
-\end{enumerate}
-
-\vspace{10pt}
-
-PV satisfies Polyani's structural definition due to tranche stratification and the competitive hierarchy that emerges. This is polycentrism not as an aspiration but as a mathematical property of the mechanism, as voting power is distributed across tranches  categorising stakeholders amongst similar time weights. Each demographic acting a centre of decision-making to dictate consensus.
+While the solicitation of votes has long been scrutinised but yet unquestionably facilitated through derivative arrangements, the incentives to rent voting rights have largely been non-existent. However, time-weighting fulfils that vacancy given enhanced voting rights cannot be obtained without tenure and because a transfer of inventory would nullify any accrued rights, making lending as a method to economically provision votes mostly redundant. Unlike plutocracy where 51\% control attains acquiring shares equivalent to that voting threshold, where Polycentric Voting has compounding constraints; limited market depth and fragmented negotiations across stakeholders with heterogeneous time weights - shifting governance attacks \textbf{from capital allocation problems to multi-period coordination challenges} with significantly higher execution risk. Furthermore enabling revocability fundamentally restructures leasing contracts in secondary markets, enforcing settlement to be on a per second continuous basis rather than fixed term. Voting markets transform participation into an economic incentive, the implications of which cannot be adequately gauged, given the demand of voting influence to any organisation is market subjective. Additionally these markets enable hedges against secondary market exposure for convicted stakeholders through leasing whom wish to retain their commitment. Finally, the renting of voting power can be satisfactory to fulfilling quorum if participation is lacklustre on select issues, ensuring organisations are not inhibited in absence of engagement.
 
 \newpage
 
-\section{Limitations}
+\section{\signifier Empty Voting}
 
-\textbf{Simulation sample distribution} assumes a simplified holder distribution with fixed share allocations and a controlled onboarding schedule. Real governance distributions are more heterogeneous and the competitive dynamics observed may differ under alternative configurations. Results should be interpreted as illustrative of the mechanism's properties rather than predictive of any specific deployment. 
+\textbf{Hu and Black (2006)} identified empty voting as the systematic decoupling of voting rights from economic ownership in shareholder governance \cite{hu2006}. Empty votes form across generalised financial instruments like derivatives and lending arrangements, all producing nominal voting power in absence of cash-flow rights.
+
+When observing precursor time-weighted implementations such as loyalty shares, that carry increased voting power after select inventory duration, the recontextualisation of this problem has implications not previously discussed. For one, the record-date capture attack cannot realise such increased influence. Given that for lending obligations, the principal requires transfer of ownership that ultimately voids accrued tenure when credited to the borrower. Another dynamic is the discounting of active portfolio management, as stakeholders whom wish to realise full voting rights default to a strategy of pure acquisition rather than continuous rebalancing to mitigate market risk for traditional common stock. The implications of which can be assumed saturate market liquidity and volume further increasing execution cost for derivatives arrangements. 
+
+Other morphable ownership arrangements like equity swaps are inhibited but not eliminated, given for a swap to initiate or unwind transfers between counterparties is necessary, voiding accrued tenure and eliminating "hidden" ownership for enhanced voting rights. Although in the case of cash settled swaps, it is only a dealer issue relative to the hedge and not any prior established holdings. A dealer whom has built up tenure, can orchestrate empty votes even with accrued influence, as a delta-neutral strategy only requires inventory for the hedge. Nevertheless, what this shows is that time-weighting does not eliminate empty voting but alleviates it amongst common stakeholders and consolidates it to the established, all while carrying increased execution risk.
+
+When applying these observations to Polycentric Voting, there is continuity but also some differences in how the empty voting problem is constructed. The most apparent being that transfers in isolation do not void tenure, more specifically it being preserved for any balance deductions (given non-zero resultant balance) and diluted proportionally in the presence of any additional inventory. The implications of which affect the viability of venues like exchanges, brokers or lenders towards building tenure, as while they are still penalised from continuous rebalancing, it is a temporal and proportionate disadvantage rather than absolute. Still record-date capture remains eliminated for elevated voting rights, given for a borrower to provision a loan, a transfer of ownership must occur. With it either \textbf{a)} proportionally diluting the borrowers pre-established tenure or \textbf{b)} providing no transfer of tenure. For the case of morphable ownership strategies, the previous constraints in the case of swaps are redefined. As for settlement, the receiver of the swap will have their effective time continuously saturated from incremental payments therefore prolonging the amount of time to establish tenure versus traditional inventory.
+
+\section{\signifier Polycentricity}
+
+In a series of essays on society, \textbf{Polanyi (1951)} theorised the concept of polycentrism, defined as; a system consisting of multiple centres, coordinated through mutual adjustment. This abstract structural framework has many integral applications, such as systems or tasks like public markets, institutional frameworks and scientific research. 
+
+\subsection{\signifier Definition}
+
+The term "polycentric" can refer to two select meanings, dependent on context, which should be clearly distinguished:
+
+\begin{itemize}[label=,leftmargin=\parindent]
+\item\textbf{a) a label for relationships that share multiple independent centres} 
+\item\textbf{b) a descriptor of process or task which follows an emergent order} 
+\end{itemize}
+
+\noindent So with reference to Polyani's prior visualisation for definition b \cite{polanyi1951}, we define an inspired but not equivalent, model for polycentric structures that satisfies definition a.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{polycentricity_n_series.png}
+     \caption{Coordination graphs by centre-count}    
+    \label{fig:polycentric-formation}
+\end{figure}
+
+Monocentric referring to structures like traditional shareholder voting where shares or stake is the only centre. Duocentric referring to systems like loyalty shares baring two axes (stake, time) and Polycentric as structures with equal to or greater than three centres.
+
+\subsection{\signifier By Construction}
+
+Let us identify the primary axes of Polycentric Voting to satisfy it under definition a:
+
+\begin{enumerate}[labelindent=\parindent, leftmargin=*]
+
+\item\textbf{Stake} or more commonly referred to a denomination of "shares" or "stock", here expressed as $S$, is the canonical currency of proportional economic ownership for organisations and defining authority as seen in standard weighted-voting. 
     
-\textbf{Tenure as a signal} mechanism and not an enforceable governance primitive, its value and accuracy compounding with organisation age and negligible in early stage governance where longitudinal commitment data is insufficient to distinguish trajectories meaningfully. 
+\item\textbf{Time} being the duration of which conviction is exercised, traditionally labelled as tenure even in absence of formal specification, here represented by $t_{\text{effective}}$.
     
-\textbf{Delegation market risk} remains the most credible attack vector. While high $\tau$ positions are supply constrained by construction and delegated authority retains the delegator's commitment profile, the emergence of secondary markets around governance legitimacy cannot be structurally eliminated only made economically costly relative to direct participation.
+\item\textbf{Commitment} defined as the function of which Stake and Time are continuously applied, formulated herein as $\tau$, fundamentally dictates the rate of which of power is accrued. 
 
-\section{Conclusion}
+\end{enumerate}
 
-Polycentric voting is a governance model to align the interests of an organisation with its participants and makes power dynamics explicit, rather than opaque, creating a more strategic and nuanced governance process. It provides a more robust yet dynamic mechanism of arbitration for decision-making in organisations versus plutocracy and is the closest mathematical representation for  loyalty within organisational systems.
+\vspace{15pt} 
+\hrule 
+\vspace{10pt}
 
-\section{Acknowledgements}
+\noindent There may be additional argument in the topology exhibited by the emergent stratification of tranches across the voting power curve, categorising shareholders into distinct demographics weighed by maturity. Each demographic acting a centre of decision-making to dictate consensus. Albeit dependent on the distribution of tenure and relative proportional stake, thus cannot be affirmed as a constant property of the model. 
+
+\newpage 
+
+\subsection{\signifier Ostrom's Design Principles}
+
+The concept presented stands to be adapted across many domains to interpret of how adequate cooperative decision-making is constructed and functions. \textbf{Ostrom (1990)} being a prime example, given her studies on empirical examples of common pooled resources operational today and throughout history. She concluded that effective governance as polycentric in nature, composed of systematic boundaries, mutual adjustment and congruence amongst its participants \cite{ostrom1990}. Theorising that such governance satisfies eight independent principles, here we identify three that are complement to Polycentric Voting in assistance of designing institutional policy for effective collective action. 
+
+The first principle \textbf{Clearly defined boundaries}, organisations can clearly define parameters $T$, $P$, $t_{\text{max}}$, $r_{min}$, $r_{max}$ and $k$ values to shape the governance lifecycle and declare what constitutes loyalty. A new organisation and a mature cooperative operate under fundamentally different interests, that can be adapted for accordingly. The Agile and Progressive configurations being examples of such curation. The second \textbf{Congruence between appropriation and provision rules in local conditions}, Graduated Proposals complement this principle through providing agency to author nuanced institutional policy. Organisations can directly set resource provision rules per ballot tier like budgets to limit expenditures for sustainable resource management or restrict institutional decisions relative to voter turnout.
+
+The fourth principle of \textbf{Monitoring}, as previously discussed in traditional shareholder voting the distribution of power is mostly ambiguous. Given how the element of time is absent and how capital is the sole denomination in dictating authority, When paired with the accessibility of continuous market liquidity, results in vote-buying being advantageous and ultimately eroding any meaningful distinction on a gauge of the distribution of power. Vote Provenance helps satisfy this principle, every vote is backed by a verifiable commitment profile $\rho$, $\tau$ and $t_{\mathrm{effective}}$ requiring no external metrics or framework. The system produces its own metrics as a byproduct of the commitment mechanics. Any actor can inspect and predict any other participant's trajectory at any time, making governance transparent.
+
+\section{\signifier Limitations}
+
+\noindent\textbf{Simulation sample distribution} assumes a simplified stakeholder arrangement with fixed share allocations and a controlled onboarding schedule. Real governance distributions are more heterogeneous and the competitive dynamics observed may differ under alternative configurations. Results should be interpreted as illustrative of the model's properties rather than predictive of any specific deployment. 
+    
+\noindent\textbf{Tenure as a signal mechanism} and not as an actionable governance metric, its value and accuracy compounding with organisation age but negligible in the early stages of governance. Where longitudinal commitment data is insufficient to distinguish trajectories meaningfully. 
+    
+\noindent\textbf{Delegation market risk} remains the most credible attack vector. While high $t_{\text{effective}}$ positions are supply constrained and authority is retained by the delegator, the emergence of secondary markets around governance legitimacy cannot be structurally eliminated only made economically costly relative to direct participation.
+
+\section{\signifier Conclusion}
+
+For what is proposed, a voting model to align institutional interests with its participants architected through explicit power dynamics, rather than opaque, creates a more strategic and nuanced governance process. That increases representation and discounts short-termisim, all while providing flexibility to what can be defined as commitment. Producing a dynamic order of power in juxtapose to the static order of plutocracy, acting as a mathematical representation for loyalty within organisational systems.
+
+\section{\signifier Acknowledgements}
 
 Heinrich Hartmann and Ruben R. Puentedura for their work on the Python implementation of the Banzhaf index, and Professor Dennis Leech for the underlying theory originating from his work on the factorisation of polynomials in power indices.
 
